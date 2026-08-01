@@ -1,0 +1,46 @@
+{
+  "name": "Course",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "certificate_type": {
+      "type": "string",
+      "enum": [
+        "SHRM-CP",
+        "SHRM-SCP"
+      ]
+    },
+    "course_type": {
+      "type": "string",
+      "enum": [
+        "main",
+        "exam_simulation"
+      ]
+    },
+    "price": {
+      "type": "number"
+    },
+    "thumbnail_url": {
+      "type": "string"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "total_units": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "title",
+    "certificate_type",
+    "course_type",
+    "price"
+  ]
+}

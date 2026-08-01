@@ -1,0 +1,27 @@
+{
+  "name": "FlashCard",
+  "type": "object",
+  "properties": {
+    "unit_id": {
+      "type": "string"
+    },
+    "course_id": {
+      "type": "string"
+    },
+    "front_text": {
+      "type": "string"
+    },
+    "back_text": {
+      "type": "string"
+    },
+    "order": {
+      "type": "number",
+      "default": 1
+    }
+  },
+  "required": [
+    "course_id",
+    "front_text",
+    "back_text"
+  ]
+}

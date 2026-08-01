@@ -1,0 +1,35 @@
+{
+  "name": "UserProgress",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "course_id": {
+      "type": "string"
+    },
+    "unit_id": {
+      "type": "string"
+    },
+    "progress_type": {
+      "type": "string",
+      "enum": [
+        "video_watched",
+        "quiz_completed",
+        "flashcards_reviewed"
+      ]
+    },
+    "quiz_score": {
+      "type": "number"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "user_id",
+    "course_id",
+    "progress_type"
+  ]
+}
