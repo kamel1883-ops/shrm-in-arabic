@@ -70,24 +70,9 @@ export default function Home() {
       <div className="flex">
         {/* Sidebar */}
         <aside className="w-64 min-h-screen border-l border-white/10 shrink-0 hidden md:flex flex-col" style={{ background: "rgba(8,12,25,0.8)" }}>
-          {/* Profile */}
-          <div className="p-6 border-b border-white/10 text-center">
-            <div className="relative w-20 h-20 mx-auto mb-3">
-              <Image
-                src={PHOTO}
-                className="w-20 h-20 rounded-full object-cover"
-                style={{ borderWidth: 3, borderStyle: "solid", borderColor: "rgba(250,204,21,0.6)" }}
-              />
-              <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-gray-900" />
-            </div>
-            <p className="text-white font-semibold text-sm">كامل إسماعيل</p>
-            <div className="mt-4 mb-2 text-center">
-              <div className="inline-flex flex-col items-center">
-                <span className="text-yellow-400 text-2xl">👑</span>
-                <span className="text-yellow-400 font-bold text-base tracking-widest">KAMEL ISMAIL</span>
-              </div>
-              <p className="text-white/40 text-xs mt-1 leading-relaxed">شرم بالعربي<br />SHRM-CP / SHRM-SCP</p>
-            </div>
+          {/* Logo only */}
+          <div className="p-6 border-b border-white/10 flex flex-col items-center gap-2">
+            <SHRMLogo size={56} showText={true} />
           </div>
 
           {/* Nav */}

@@ -115,6 +115,7 @@ export default function Courses() {
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
             <SHRMLogo size={40} showText={true} />
+            <span className="font-heading font-bold text-white text-base hidden md:block">شرم بالعربي</span>
           </Link>
           <div className="flex items-center gap-2">
             {user ? (
