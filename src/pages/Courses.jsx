@@ -148,9 +148,9 @@ export default function Courses() {
           </div>
 
           <p className="text-blue-300 font-medium text-sm mb-2">SHRM-CP® / SHRM-SCP® Exam Preparation</p>
-          <h1 className="font-heading text-5xl font-bold text-white mb-1">Learning</h1>
-          <h1 className="font-heading text-5xl font-bold text-white mb-4">System</h1>
-          <p className="text-white/50 text-sm">نظام تعليمي مستوحى من الكتب الرسمية لـ SHRM 2025</p>
+          <h1 className="font-heading text-4xl font-bold text-white mb-1">التحضير للاختبارات المهنية</h1>
+          <h1 className="font-heading text-4xl font-bold mb-4" style={{ color: "#F59E0B" }}>SHRM-CP / SHRM-SCP</h1>
+          <p className="text-white/50 text-sm">نظام تعليمي مستوحى من الكتب الرسمية لـ SHRM</p>
         </div>
 
         {/* Tab Switcher */}
@@ -232,7 +232,7 @@ function BookCard({ book }) {
               <p className="text-white/60 text-xs leading-none">BETTER WORLD™</p>
             </div>
           </div>
-          <span className="text-yellow-400 font-bold text-lg">2025</span>
+          <span className="text-yellow-400 font-bold text-lg">SHRM</span>
         </div>
 
         <p className="text-blue-200 text-xs font-medium mb-0.5">SHRM-CP® / SHRM-SCP®</p>
@@ -327,7 +327,7 @@ function CourseCard({ course, enrolled, user, type, certType }) {
         )}
 
         <div className="flex items-baseline justify-between mb-4">
-          <span className="text-2xl font-bold text-yellow-400">${c.price}</span>
+          <span className="text-2xl font-bold text-yellow-400">{(c.price * 3.75).toFixed(0)} ر.س</span>
           <span className="text-xs text-white/30">وصول مدى الحياة</span>
         </div>
 
@@ -346,7 +346,7 @@ function CourseCard({ course, enrolled, user, type, certType }) {
         ) : course?.id ? (
           <Link to={`/checkout/${course.id}`}>
             <Button className="w-full text-white font-semibold" style={{ background: isMain ? gradientMain : gradientExam }}>
-              اشترك الآن — ${c.price}
+              اشترك الآن — {(c.price * 3.75).toFixed(0)} ر.س
             </Button>
           </Link>
         ) : (
