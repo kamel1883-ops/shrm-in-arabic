@@ -12,7 +12,7 @@ export default function Profile() {
   ];
 
   const experiences = [
-    { role: "مدير رأس المال البشري", years: "15+ سنة خبرة" },
+    { role: "مدير رأس المال البشري", years: "9 سنوات خبرة" },
     { role: "قائد استراتيجيات العمل", years: "استشارات مؤسسية" },
     { role: "مدرب معتمد SHRM", years: "تدريب وتطوير" },
   ];
@@ -39,7 +39,7 @@ export default function Profile() {
           <div className="flex flex-col md:flex-row items-center gap-8 p-8">
             <div className="relative shrink-0">
               <Image
-                src="https://media.base44.com/images/public/6a6dcc665d711f7ab11f51c9/16f6dfabd_WhatsAppImage2026-07-14at15722PM.jpg"
+                src="https://media.base44.com/images/public/6a6dcc665d711f7ab11f51c9/bc2499f6c_WhatsAppImage2026-08-01at12947PM.jpeg"
                 className="w-36 h-36 rounded-2xl object-cover border-2 border-yellow-400/40"
               />
               <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-2 border-gray-900 flex items-center justify-center">

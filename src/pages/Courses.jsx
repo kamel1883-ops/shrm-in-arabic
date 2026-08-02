@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Award, BookOpen, FileCheck, Lock, ArrowLeft, Play, Brain } from "lucide-react";
+import SHRMLogo from "@/components/SHRMLogo";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -113,11 +114,7 @@ export default function Courses() {
       <header className="border-b border-white/10 sticky top-0 z-40" style={{ background: "rgba(10,15,30,0.95)", backdropFilter: "blur(10px)" }}>
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl border-2 border-yellow-400/60 flex flex-col items-center justify-center" style={{ background: "linear-gradient(135deg,#1e3a5f,#0d2040)" }}>
-              <span className="text-yellow-400 font-bold text-xs leading-none">SHRM</span>
-              <span className="text-yellow-300 text-xs leading-none">SCP</span>
-            </div>
-            <span className="font-heading font-bold text-lg text-white">SHRM Academy</span>
+            <SHRMLogo size={40} showText={true} />
           </Link>
           <div className="flex items-center gap-2">
             {user ? (
@@ -276,7 +273,8 @@ function CourseCard({ course, enrolled, user, type, certType }) {
     description: isMain
       ? "محتوى تعليمي متكامل مستوحى من SHRM Learning System: فيديوهات، اختبارات لكل وحدة، وفلاش كاردز تفاعلية"
       : "بيئة محاكاة كاملة للامتحان الرسمي مع 134 سؤالاً وتحليل مفصّل للأداء حسب المجالات",
-    price: isMain ? 199 : 99,
+    price: isMain ? (certType === "SHRM-CP" ? 400 : 533.33) : (certType === "SHRM-CP" ? 400 : 533.33),
+    priceDisplay: isMain ? (certType === "SHRM-CP" ? "1,500" : "2,000") : (certType === "SHRM-CP" ? "1,500" : "2,000"),
     total_units: 8,
   };
   const c = course || defaults;
@@ -327,7 +325,7 @@ function CourseCard({ course, enrolled, user, type, certType }) {
         )}
 
         <div className="flex items-baseline justify-between mb-4">
-          <span className="text-2xl font-bold text-yellow-400">{(c.price * 3.75).toFixed(0)} ر.س</span>
+          <span className="text-2xl font-bold text-yellow-400">{c.priceDisplay || (c.price ? (c.price * 3.75).toFixed(0) : (isMain ? (certType === "SHRM-CP" ? "1,500" : "2,000") : "1,500"))} ر.س</span>
           <span className="text-xs text-white/30">وصول مدى الحياة</span>
         </div>
 
@@ -346,7 +344,7 @@ function CourseCard({ course, enrolled, user, type, certType }) {
         ) : course?.id ? (
           <Link to={`/checkout/${course.id}`}>
             <Button className="w-full text-white font-semibold" style={{ background: isMain ? gradientMain : gradientExam }}>
-              اشترك الآن — {(c.price * 3.75).toFixed(0)} ر.س
+              اشترك الآن — {c.priceDisplay || (c.price ? (c.price * 3.75).toFixed(0) : (isMain ? (certType === "SHRM-CP" ? "1,500" : "2,000") : "1,500"))} ر.س
             </Button>
           </Link>
         ) : (

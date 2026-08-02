@@ -22,7 +22,7 @@ export default function InstructorAbout() {
         <div className="text-center mb-10">
           <div className="relative inline-block mb-4">
             <Image
-              src="https://media.base44.com/images/public/6a6dcc665d711f7ab11f51c9/16f6dfabd_WhatsAppImage2026-07-14at15722PM.jpg"
+              src="https://media.base44.com/images/public/6a6dcc665d711f7ab11f51c9/bc2499f6c_WhatsAppImage2026-08-01at12947PM.jpeg"
               className="w-32 h-32 rounded-full border-4 border-yellow-400/60 mx-auto object-cover"
             />
           </div>

@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { Award, BookOpen, Brain, FileCheck, Star, CheckCircle, GraduationCap, Trophy, Target, BarChart3, Medal, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";
+import SHRMLogo from "@/components/SHRMLogo";
+
+const PHOTO = "https://media.base44.com/images/public/6a6dcc665d711f7ab11f51c9/bc2499f6c_WhatsAppImage2026-08-01at12947PM.jpeg";
 
 export default function Home() {
   const stats = [
@@ -46,11 +49,7 @@ export default function Home() {
       {/* Top Bar */}
       <header className="border-b border-white/10 px-6 py-3 flex items-center justify-between sticky top-0 z-50" style={{ background: "rgba(10,15,30,0.95)", backdropFilter: "blur(10px)" }}>
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl flex flex-col items-center justify-center border-2 border-yellow-400/60" style={{ background: "linear-gradient(135deg, #1e3a5f, #0d2040)" }}>
-            <span className="text-yellow-400 font-bold text-xs leading-none">SHRM</span>
-            <span className="text-yellow-300 text-xs leading-none mt-0.5">SCP</span>
-          </div>
-          <span className="text-white/80 text-sm font-medium hidden md:block">التحضير للاختبارات المهنية SHRM-CP / SHRM-SCP</span>
+          <SHRMLogo size={44} showText={true} />
         </div>
         <div className="flex items-center gap-3">
           <Link to="/notifications">
@@ -75,7 +74,7 @@ export default function Home() {
           <div className="p-6 border-b border-white/10 text-center">
             <div className="relative w-20 h-20 mx-auto mb-3">
               <Image
-                src="https://media.base44.com/images/public/6a6dcc665d711f7ab11f51c9/16f6dfabd_WhatsAppImage2026-07-14at15722PM.jpg"
+                src={PHOTO}
                 className="w-20 h-20 rounded-full object-cover"
                 style={{ borderWidth: 3, borderStyle: "solid", borderColor: "rgba(250,204,21,0.6)" }}
               />
@@ -87,7 +86,7 @@ export default function Home() {
                 <span className="text-yellow-400 text-2xl">👑</span>
                 <span className="text-yellow-400 font-bold text-base tracking-widest">KAMEL ISMAIL</span>
               </div>
-              <p className="text-white/40 text-xs mt-1 leading-relaxed">التحضير للاختبارات المهنية<br />SHRM-CP / SHRM-SCP</p>
+              <p className="text-white/40 text-xs mt-1 leading-relaxed">شرم بالعربي<br />SHRM-CP / SHRM-SCP</p>
             </div>
           </div>
 
@@ -122,7 +121,7 @@ export default function Home() {
               {/* Photo */}
               <div className="relative md:w-56 flex items-end justify-center pt-6 md:pt-0">
                 <Image
-                  src="https://media.base44.com/images/public/6a6dcc665d711f7ab11f51c9/16f6dfabd_WhatsAppImage2026-07-14at15722PM.jpg"
+                  src={PHOTO}
                   className="h-56 md:h-full w-48 md:w-full object-cover object-top rounded-xl md:rounded-none"
                   fittingType="fill"
                 />
