@@ -281,7 +281,7 @@ function CourseCard({ course, enrolled, user, type, certType }) {
   const c = course || defaults;
   const displayPrice = isMain
     ? (certType === "SHRM-CP" ? "1,300" : "1,800")
-    : (certType === "SHRM-CP" ? "1,300" : "1,800");
+    : (c.priceDisplay || (c.price ? (c.price * 3.75).toFixed(0) : "1,300"));
 
   const gradientMain = "linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%)";
   const gradientExam = "linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%)";
