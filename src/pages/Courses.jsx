@@ -146,7 +146,7 @@ export default function Courses() {
           </div>
 
           <p className="text-blue-300 font-medium text-sm mb-2">SHRM-CP® / SHRM-SCP® Exam Preparation</p>
-          <h1 className="font-heading text-4xl font-bold text-white mb-1">التحضير للاختبارات المهنية</h1>
+          <h1 className="font-heading text-4xl font-bold text-white mb-1">الدورات التعليمية</h1>
           <h1 className="font-heading text-4xl font-bold mb-4" style={{ color: "#F59E0B" }}>SHRM-CP / SHRM-SCP</h1>
           <p className="text-white/50 text-sm">نظام تعليمي مستوحى من الكتب الرسمية لـ SHRM</p>
         </div>
@@ -273,10 +273,10 @@ function CourseCard({ course, enrolled, user, type, certType }) {
     title: isMain ? `دورة ${certType} الشاملة` : `محاكاة امتحان ${certType}`,
     description: isMain
       ? "محتوى تعليمي متكامل مستوحى من SHRM Learning System: فيديوهات، اختبارات لكل وحدة، وفلاش كاردز تفاعلية"
-      : "بيئة محاكاة كاملة للامتحان الرسمي مع 134 سؤالاً وتحليل مفصّل للأداء حسب المجالات",
+      : "8 اختبارات محاكاة كاملة للامتحان الرسمي، كل اختبار 134 سؤالاً و230 دقيقة، مع تحليل مفصّل للأداء حسب المجالات",
     price: isMain ? (certType === "SHRM-CP" ? 400 : 533.33) : (certType === "SHRM-CP" ? 400 : 533.33),
     priceDisplay: isMain ? (certType === "SHRM-CP" ? "1,300" : "1,800") : (certType === "SHRM-CP" ? "1,300" : "1,800"),
-    total_units: 8,
+    total_units: 10,
   };
   const c = course || defaults;
   const displayPrice = isMain
@@ -303,9 +303,9 @@ function CourseCard({ course, enrolled, user, type, certType }) {
         {isMain ? (
           <div className="grid grid-cols-3 gap-2 mb-5 text-center">
             {[
-              { icon: Play, label: "فيديو", val: c.total_units || 8 },
-              { icon: Brain, label: "فلاش كارد", val: "50+" },
-              { icon: FileCheck, label: "اختبار", val: c.total_units || 8 },
+              { icon: Play, label: "فيديو", val: 10 },
+              { icon: Brain, label: "فلاش كارد", val: "100+" },
+              { icon: FileCheck, label: "اختبار", val: 10 },
             ].map(item => (
               <div key={item.label} className="rounded-xl py-3 px-2 border border-white/10" style={{ background: "rgba(10,15,30,0.6)" }}>
                 <item.icon className="w-4 h-4 text-blue-400 mx-auto mb-1" />
@@ -317,8 +317,8 @@ function CourseCard({ course, enrolled, user, type, certType }) {
         ) : (
           <div className="grid grid-cols-2 gap-2 mb-5 text-center">
             {[
-              { label: "سؤال", val: "134" },
-              { label: "دقيقة", val: "230" },
+              { label: "اختبارات", val: "8" },
+              { label: "سؤال/اختبار", val: "134" },
             ].map(item => (
               <div key={item.label} className="rounded-xl py-3 px-2 border border-white/10" style={{ background: "rgba(10,15,30,0.6)" }}>
                 <div className="text-base font-bold text-white">{item.val}</div>

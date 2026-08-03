@@ -34,7 +34,7 @@ export default function Home() {
 
   const navLinks = [
     { icon: "🏠", label: "الرئيسية", to: "/" },
-    { icon: "📝", label: "الاختبارات", to: "/courses" },
+    { icon: "📝", label: "الدورات", to: "/courses" },
     { icon: "📚", label: "قائمة المحتويات", to: "/course-outline" },
     { icon: "🃏", label: "فلاش كاردز", to: "/flashcards" },
     { icon: "📊", label: "تقارير التقدم", to: "/progress-report" },
@@ -164,7 +164,7 @@ export default function Home() {
             <div className="flex items-center gap-2 mb-5">
               <span className="text-yellow-400 text-lg">📋</span>
               <h2 className="font-heading text-white font-bold text-lg">الاختبارات التجريبية</h2>
-              <span className="text-white/30 text-xs mr-auto">134 سؤال / 230 دقيقة لكل اختبار</span>
+              <span className="text-white/30 text-xs mr-auto">8 اختبارات · 134 سؤال · 230 دقيقة لكل اختبار</span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
               {exams.map((exam) => (
