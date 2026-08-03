@@ -38,7 +38,7 @@ export default function Profile() {
             <div className="relative shrink-0">
               <Image
                 src="https://media.base44.com/images/public/6a6dcc665d711f7ab11f51c9/bc2499f6c_WhatsAppImage2026-08-01at12947PM.jpeg"
-                className="w-36 h-36 rounded-full object-cover border-2 border-yellow-400/40"
+                className="w-36 h-36 rounded-full object-cover border-2 border-yellow-400/40 overflow-hidden"
               />
               <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-2 border-gray-900 flex items-center justify-center">
                 <Star className="w-4 h-4 text-white" />

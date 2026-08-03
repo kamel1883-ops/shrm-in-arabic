@@ -107,7 +107,7 @@ export default function Home() {
               <div className="relative flex items-center justify-center pt-6 md:pt-0 md:pr-8">
                 <Image
                   src={PHOTO}
-                  className="w-36 h-36 md:w-44 md:h-44 object-cover rounded-full border-4 border-yellow-400/40"
+                  className="w-36 h-36 md:w-44 md:h-44 object-cover rounded-full border-4 border-yellow-400/40 overflow-hidden"
                   fittingType="fill"
                 />
               </div>

@@ -279,6 +279,9 @@ function CourseCard({ course, enrolled, user, type, certType }) {
     total_units: 8,
   };
   const c = course || defaults;
+  const displayPrice = isMain
+    ? (certType === "SHRM-CP" ? "1,300" : "1,800")
+    : (certType === "SHRM-CP" ? "1,300" : "1,800");
 
   const gradientMain = "linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%)";
   const gradientExam = "linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%)";
@@ -326,7 +329,7 @@ function CourseCard({ course, enrolled, user, type, certType }) {
         )}
 
         <div className="flex items-baseline justify-between mb-4">
-          <span className="text-2xl font-bold text-yellow-400">{c.priceDisplay || (c.price ? (c.price * 3.75).toFixed(0) : (isMain ? (certType === "SHRM-CP" ? "1,300" : "1,800") : "1,300"))} ر.س</span>
+          <span className="text-2xl font-bold text-yellow-400">{displayPrice} ر.س</span>
           <span className="text-xs text-white/30">وصول مدى الحياة</span>
         </div>
 
@@ -345,7 +348,7 @@ function CourseCard({ course, enrolled, user, type, certType }) {
         ) : course?.id ? (
           <Link to={`/checkout/${course.id}`}>
             <Button className="w-full text-white font-semibold" style={{ background: isMain ? gradientMain : gradientExam }}>
-              اشترك الآن — {c.priceDisplay || (c.price ? (c.price * 3.75).toFixed(0) : (isMain ? (certType === "SHRM-CP" ? "1,300" : "1,800") : "1,300"))} ر.س
+              اشترك الآن — {displayPrice} ر.س
             </Button>
           </Link>
         ) : (
