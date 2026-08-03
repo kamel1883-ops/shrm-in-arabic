@@ -10,6 +10,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 
 // Pages
 import Home from './pages/Home';
+import Admin from './pages/Admin';
 import Courses from './pages/Courses';
 import CourseView from './pages/CourseView';
 import ExamSimulation from './pages/ExamSimulation';
@@ -66,6 +67,7 @@ const AuthenticatedApp = () => {
       <Route path="/resource-library" element={<ResourceLibrary />} />
       <Route path="/certification-guide" element={<CertificationGuide />} />
       <Route path="/notifications" element={<Notifications />} />
+      <Route path="/admin" element={<Admin />} />
       <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/course/:courseId" element={<CourseView />} />
