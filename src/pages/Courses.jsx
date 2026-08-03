@@ -275,7 +275,7 @@ function CourseCard({ course, enrolled, user, type, certType }) {
       ? "محتوى تعليمي متكامل مستوحى من SHRM Learning System: فيديوهات، اختبارات لكل وحدة، وفلاش كاردز تفاعلية"
       : "بيئة محاكاة كاملة للامتحان الرسمي مع 134 سؤالاً وتحليل مفصّل للأداء حسب المجالات",
     price: isMain ? (certType === "SHRM-CP" ? 400 : 533.33) : (certType === "SHRM-CP" ? 400 : 533.33),
-    priceDisplay: isMain ? (certType === "SHRM-CP" ? "1,500" : "2,000") : (certType === "SHRM-CP" ? "1,500" : "2,000"),
+    priceDisplay: isMain ? (certType === "SHRM-CP" ? "1,300" : "1,800") : (certType === "SHRM-CP" ? "1,300" : "1,800"),
     total_units: 8,
   };
   const c = course || defaults;
@@ -326,7 +326,7 @@ function CourseCard({ course, enrolled, user, type, certType }) {
         )}
 
         <div className="flex items-baseline justify-between mb-4">
-          <span className="text-2xl font-bold text-yellow-400">{c.priceDisplay || (c.price ? (c.price * 3.75).toFixed(0) : (isMain ? (certType === "SHRM-CP" ? "1,500" : "2,000") : "1,500"))} ر.س</span>
+          <span className="text-2xl font-bold text-yellow-400">{c.priceDisplay || (c.price ? (c.price * 3.75).toFixed(0) : (isMain ? (certType === "SHRM-CP" ? "1,300" : "1,800") : "1,300"))} ر.س</span>
           <span className="text-xs text-white/30">وصول مدى الحياة</span>
         </div>
 
@@ -345,7 +345,7 @@ function CourseCard({ course, enrolled, user, type, certType }) {
         ) : course?.id ? (
           <Link to={`/checkout/${course.id}`}>
             <Button className="w-full text-white font-semibold" style={{ background: isMain ? gradientMain : gradientExam }}>
-              اشترك الآن — {c.priceDisplay || (c.price ? (c.price * 3.75).toFixed(0) : (isMain ? (certType === "SHRM-CP" ? "1,500" : "2,000") : "1,500"))} ر.س
+              اشترك الآن — {c.priceDisplay || (c.price ? (c.price * 3.75).toFixed(0) : (isMain ? (certType === "SHRM-CP" ? "1,300" : "1,800") : "1,300"))} ر.س
             </Button>
           </Link>
         ) : (

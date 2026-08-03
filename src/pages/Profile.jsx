@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Award, GraduationCap, Medal, Star, Briefcase, ArrowRight } from "lucide-react";
 import { Image } from "@/components/ui/image";
+import SHRMLogo from "@/components/SHRMLogo";
 
 export default function Profile() {
   const credentials = [
@@ -21,11 +22,8 @@ export default function Profile() {
     <div className="min-h-screen font-body" style={{ background: "linear-gradient(160deg,#0a0f1e 0%,#0d1a35 60%,#0a1628 100%)" }} dir="rtl">
       <header className="border-b border-white/10 sticky top-0 z-40" style={{ background: "rgba(10,15,30,0.95)", backdropFilter: "blur(10px)" }}>
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl border-2 border-yellow-400/60 flex flex-col items-center justify-center" style={{ background: "linear-gradient(135deg,#1e3a5f,#0d2040)" }}>
-              <span className="text-yellow-400 font-bold text-xs">SHRM</span>
-            </div>
-            <span className="font-heading font-bold text-white">SHRM Academy</span>
+          <Link to="/" className="flex items-center gap-3">
+            <SHRMLogo size={40} showText={true} />
           </Link>
           <Link to="/" className="flex items-center gap-1 text-sm text-white/50 hover:text-white transition-colors">
             <ArrowRight className="w-4 h-4" /> الرئيسية
@@ -40,7 +38,7 @@ export default function Profile() {
             <div className="relative shrink-0">
               <Image
                 src="https://media.base44.com/images/public/6a6dcc665d711f7ab11f51c9/bc2499f6c_WhatsAppImage2026-08-01at12947PM.jpeg"
-                className="w-36 h-36 rounded-2xl object-cover border-2 border-yellow-400/40"
+                className="w-36 h-36 rounded-full object-cover border-2 border-yellow-400/40"
               />
               <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-2 border-gray-900 flex items-center justify-center">
                 <Star className="w-4 h-4 text-white" />
