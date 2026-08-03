@@ -104,13 +104,12 @@ export default function Home() {
             <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "radial-gradient(circle at 70% 50%, #3B82F6 0%, transparent 60%)" }} />
             <div className="relative flex flex-col md:flex-row items-center md:items-stretch gap-0">
               {/* Photo */}
-              <div className="relative md:w-56 flex items-end justify-center pt-6 md:pt-0">
+              <div className="relative flex items-center justify-center pt-6 md:pt-0 md:pr-8">
                 <Image
                   src={PHOTO}
-                  className="h-56 md:h-full w-48 md:w-full object-cover object-top rounded-xl md:rounded-none"
+                  className="w-36 h-36 md:w-44 md:h-44 object-cover rounded-full border-4 border-yellow-400/40"
                   fittingType="fill"
                 />
-                <div className="absolute inset-0 md:block" style={{ background: "linear-gradient(to left, transparent 60%, rgba(13,31,60,0.8))" }} />
               </div>
 
               {/* Info */}
