@@ -4,17 +4,16 @@ import { Award, BookOpen, Brain, FileCheck, Star, CheckCircle, GraduationCap, Tr
 import { Button } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";
 import SHRMLogo from "@/components/SHRMLogo";
+import HomeCourses from "@/components/HomeCourses";
 
 const PHOTO = "https://media.base44.com/images/public/6a6dcc665d711f7ab11f51c9/bc2499f6c_WhatsAppImage2026-08-01at12947PM.jpeg";
 
 export default function Home() {
   const stats = [
-    { icon: Trophy, label: "الاختبارات المكتملة", value: "0 / 8", color: "text-yellow-400", bg: "bg-yellow-400/10 border-yellow-400/20" },
+    { icon: Trophy, label: "الاختبارات المكتملة", value: "0 / 10", color: "text-yellow-400", bg: "bg-yellow-400/10 border-yellow-400/20" },
     { icon: BarChart3, label: "متوسط الدرجات", value: "0%", color: "text-blue-400", bg: "bg-blue-400/10 border-blue-400/20" },
     { icon: Target, label: "أفضل نتيجة", value: "0%", color: "text-red-400", bg: "bg-red-400/10 border-red-400/20" },
   ];
-
-  const exams = Array.from({ length: 8 }, (_, i) => ({ num: i + 1, questions: 134 }));
 
   const credentials = [
     { icon: GraduationCap, text: "ماجستير إدارة رأس المال البشري — جامعة بورتسموث بتقدير جيد جداً" },
@@ -159,30 +158,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Exams Grid - 8 exams */}
-          <div className="rounded-2xl border border-white/10 p-5" style={{ background: "rgba(13,26,53,0.7)" }}>
-            <div className="flex items-center gap-2 mb-5">
-              <span className="text-yellow-400 text-lg">📋</span>
-              <h2 className="font-heading text-white font-bold text-lg">الاختبارات التجريبية</h2>
-              <span className="text-white/30 text-xs mr-auto">8 اختبارات · 134 سؤال · 230 دقيقة لكل اختبار</span>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
-              {exams.map((exam) => (
-                <div key={exam.num} className="rounded-xl border border-white/10 p-3 text-center transition-all hover:border-yellow-400/40 hover:scale-105 cursor-pointer" style={{ background: "rgba(10,15,30,0.8)" }}>
-                  <div className="w-10 h-10 rounded-lg mx-auto mb-2 flex items-center justify-center" style={{ background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.3)" }}>
-                    <span className="text-yellow-400 text-lg">📝</span>
-                  </div>
-                  <p className="text-white text-xs font-medium mb-0.5">الاختبار {exam.num}</p>
-                  <p className="text-white/40 text-xs mb-2">{exam.questions} سؤال</p>
-                  <Link to="/courses">
-                    <button className="w-full py-1.5 rounded-lg text-xs font-medium transition-colors text-black" style={{ background: "linear-gradient(135deg, rgba(245,158,11,0.9), rgba(217,119,6,0.9))" }}>
-                      بدء الاختبار
-                    </button>
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* Courses / Exam Simulation */}
+          <HomeCourses />
 
           {/* Bottom Row */}
           <div className="grid md:grid-cols-3 gap-5">

@@ -5,6 +5,7 @@ import { Award, BookOpen, FileCheck, Lock, ArrowLeft, Play, Brain } from "lucide
 import SHRMLogo from "@/components/SHRMLogo";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useLocalizedPrice, formatLocalizedPrice, COURSE_PRICES_SAR } from "@/utils/currency";
 
 // SHRM Learning System 2025 — Official Structure
 const SHRM_BOOKS = [
@@ -269,19 +270,16 @@ function BookCard({ book }) {
 
 function CourseCard({ course, enrolled, user, type, certType }) {
   const isMain = type === "main";
+  const { currency } = useLocalizedPrice();
+  const sarAmount = COURSE_PRICES_SAR[certType][isMain ? "main" : "simulation"];
+  const priceInfo = formatLocalizedPrice(sarAmount, currency);
   const defaults = {
     title: isMain ? `دورة ${certType} الشاملة` : `محاكاة امتحان ${certType}`,
     description: isMain
-      ? "محتوى تعليمي متكامل مستوحى من SHRM Learning System: فيديوهات، اختبارات لكل وحدة، وفلاش كاردز تفاعلية"
-      : "8 اختبارات محاكاة كاملة للامتحان الرسمي، كل اختبار 134 سؤالاً و230 دقيقة، مع تحليل مفصّل للأداء حسب المجالات",
-    price: isMain ? (certType === "SHRM-CP" ? 400 : 533.33) : (certType === "SHRM-CP" ? 400 : 533.33),
-    priceDisplay: isMain ? (certType === "SHRM-CP" ? "1,300" : "1,800") : (certType === "SHRM-CP" ? "1,300" : "1,800"),
-    total_units: 10,
+      ? "محتوى تعليمي متكامل مستوحى من SHRM Learning System: 10 فيديوهات، اختبارات لكل وحدة، 100+ فلاش كارد، بالإضافة إلى 10 امتحانات محاكاة كاملة"
+      : "10 اختبارات محاكاة كاملة للامتحان الرسمي، كل اختبار 134 سؤالاً و230 دقيقة، مع تحليل مفصّل للأداء حسب المجالات",
   };
   const c = course || defaults;
-  const displayPrice = isMain
-    ? (certType === "SHRM-CP" ? "1,300" : "1,800")
-    : (c.priceDisplay || (c.price ? (c.price * 3.75).toFixed(0) : "1,300"));
 
   const gradientMain = "linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%)";
   const gradientExam = "linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%)";
@@ -315,10 +313,11 @@ function CourseCard({ course, enrolled, user, type, certType }) {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-2 mb-5 text-center">
+          <div className="grid grid-cols-3 gap-2 mb-5 text-center">
             {[
-              { label: "اختبارات", val: "8" },
+              { label: "اختبارات", val: "10" },
               { label: "سؤال/اختبار", val: "134" },
+              { label: "دقيقة/اختبار", val: "230" },
             ].map(item => (
               <div key={item.label} className="rounded-xl py-3 px-2 border border-white/10" style={{ background: "rgba(10,15,30,0.6)" }}>
                 <div className="text-base font-bold text-white">{item.val}</div>
@@ -329,7 +328,7 @@ function CourseCard({ course, enrolled, user, type, certType }) {
         )}
 
         <div className="flex items-baseline justify-between mb-4">
-          <span className="text-2xl font-bold text-yellow-400">{displayPrice} ر.س</span>
+          <span className="text-2xl font-bold text-yellow-400">{priceInfo.full}</span>
           <span className="text-xs text-white/30">وصول مدى الحياة</span>
         </div>
 
@@ -348,7 +347,7 @@ function CourseCard({ course, enrolled, user, type, certType }) {
         ) : course?.id ? (
           <Link to={`/checkout/${course.id}`}>
             <Button className="w-full text-white font-semibold" style={{ background: isMain ? gradientMain : gradientExam }}>
-              اشترك الآن — {displayPrice} ر.س
+              اشترك الآن — {priceInfo.full}
             </Button>
           </Link>
         ) : (

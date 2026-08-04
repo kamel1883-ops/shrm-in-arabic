@@ -21,6 +21,7 @@ export default function ExamSimulation() {
   const [timeLeft, setTimeLeft] = useState(0);
   const [results, setResults] = useState(null);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [examNumber, setExamNumber] = useState(1);
   const timerRef = useRef(null);
 
   useEffect(() => {
@@ -40,19 +41,31 @@ export default function ExamSimulation() {
         const enr = await base44.entities.Enrollment.filter({ user_id: u.id, course_id: courseId, payment_status: "paid" });
         setEnrolled(enr.length > 0);
       }
-      // Load from DB first, fallback to local bank
+      // Prefer DB if it has the full 134-question bank; otherwise use local bank
       const dbQs = await base44.entities.Question.filter({ course_id: courseId, question_type: "exam_simulation" });
-      if (dbQs.length >= 10) {
-        setQuestions(dbQs);
+      if (dbQs.length >= 134) {
+        const shuffled = [...dbQs].sort(() => Math.random() - 0.5);
+        setQuestions(shuffled.slice(0, 134));
       } else {
-        const localQs = getExamQuestions(1);
-        setQuestions(localQs);
+        // Local bank: 134 questions, shuffled differently per exam number
+        setQuestions(getExamQuestions(examNumber));
       }
     } catch (e) { console.error(e); }
     setLoading(false);
   }
 
-  function startExam() {
+  async function startExam() {
+    // Re-shuffle questions for the selected exam number
+    const dbQs = await base44.entities.Question.filter({ course_id: courseId, question_type: "exam_simulation" });
+    if (dbQs.length >= 134) {
+      const shuffled = [...dbQs].sort(() => Math.random() - 0.5);
+      setQuestions(shuffled.slice(0, 134));
+    } else {
+      setQuestions(getExamQuestions(examNumber));
+    }
+    setAnswers({});
+    setFlagged(new Set());
+    setCurrent(0);
     setTimeLeft(230 * 60);
     setExamState("running");
     timerRef.current = setInterval(() => {
@@ -65,6 +78,7 @@ export default function ExamSimulation() {
 
   function submitExam() {
     clearInterval(timerRef.current);
+    // Score only counted for fully-answered questions; explanations revealed post-completion
     let correct = 0;
     questions.forEach(q => {
       const correctAns = q.correct_answer || q.correct;
@@ -72,7 +86,7 @@ export default function ExamSimulation() {
       if (userAns === correctAns) correct++;
     });
     const score = Math.round((correct / questions.length) * 100);
-    setResults({ correct, total: questions.length, score });
+    setResults({ correct, total: questions.length, score, examNumber });
     setExamState("review");
     if (user) {
       base44.entities.UserProgress.create({
@@ -125,16 +139,30 @@ export default function ExamSimulation() {
         <div className="bg-white rounded-2xl border border-gray-200 shadow-md overflow-hidden">
           {/* Blue header */}
           <div className="bg-[#1a3a6b] px-8 py-6 text-white text-center">
-            <p className="text-blue-200 text-sm mb-1">SHRM Certification</p>
+            <p className="text-blue-200 text-sm mb-1">SHRM Certification · Practice Exam Package</p>
             <h1 className="font-heading text-2xl font-bold">{course.certificate_type} Practice Exam</h1>
-            <p className="text-blue-200 text-sm mt-1">Exam Preparation Platform</p>
+            <p className="text-blue-200 text-sm mt-1">10 exams × 134 questions each</p>
           </div>
 
           <div className="px-8 py-8">
+            {/* Exam number selector */}
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 text-right">
+              <h3 className="font-bold text-[#1a3a6b] mb-3 text-sm">اختر رقم الاختبار (1 - 10)</h3>
+              <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
+                {Array.from({ length: 10 }, (_, i) => (
+                  <button key={i + 1} onClick={() => setExamNumber(i + 1)}
+                    className={`py-2 rounded-lg text-sm font-semibold transition-colors ${examNumber === i + 1 ? "bg-[#1a3a6b] text-white" : "bg-white text-[#1a3a6b] border border-[#1a3a6b]/30 hover:bg-blue-50"}`}>
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+              <p className="text-gray-500 text-xs mt-2">الاختبار الحالي: رقم {examNumber} — 134 سؤالاً · 230 دقيقة</p>
+            </div>
+
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 mb-8">
+            <div className="grid grid-cols-3 gap-4 mb-6">
               {[
-                { label: "Number of Questions", val: questions.length },
+                { label: "Number of Questions", val: 134 },
                 { label: "Time Allowed", val: "3:50:00" },
                 { label: "Passing Standard", val: "200-800" },
               ].map(item => (
@@ -154,6 +182,7 @@ export default function ExamSimulation() {
                 <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">•</span>يمكنك التنقل بين الأسئلة بحرية</li>
                 <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">•</span>سيتوقف الاختبار تلقائياً عند انتهاء الوقت</li>
                 <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">•</span>اختر الإجابة الأفضل من بين الخيارات الأربعة</li>
+                <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">•</span><span className="font-semibold text-[#1a3a6b]">عرض الإجابات الصحيحة والشرح الكامل يكون بعد إنهاء الاختبار بالكامل (134 سؤالاً)</span></li>
               </ul>
             </div>
 

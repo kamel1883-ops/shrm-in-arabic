@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 import { BookOpen, Download, ExternalLink, ArrowRight, Search } from "lucide-react";
 
 const RESOURCES = [
-  { title: "SHRM Learning System — Organization", desc: "Structure of the HR Function, Organizational Effectiveness & Development, Workforce Management, Employee & Labor Relations, Technology Management", type: "كتاب رسمي", tag: "SHRM", color: "blue" },
-  { title: "SHRM Learning System — People", desc: "HR Strategy, Talent Acquisition, Employee Engagement & Retention, Learning & Development, Total Rewards", type: "كتاب رسمي", tag: "SHRM", color: "blue" },
-  { title: "SHRM Learning System — Workplace", desc: "Managing a Global Workforce, Risk Management, Corporate Social Responsibility, U.S. Employment Law & Regulations", type: "كتاب رسمي", tag: "SHRM", color: "blue" },
-  { title: "SHRM Learning System — Competencies", desc: "Leadership & Navigation, Ethical Practice, Inclusion & Diversity, Relationship Management, Communication, Global Mindset, Business Acumen", type: "كتاب رسمي", tag: "SHRM", color: "blue" },
-  { title: "SHRM BoCK — Body of Competency & Knowledge", desc: "الإطار الرسمي لكفاءات ومعارف متخصصي الموارد البشرية", type: "مرجع أساسي", tag: "SHRM", color: "yellow" },
-  { title: "SHRM-CP & SHRM-SCP Exam Window Guide", desc: "دليل الاختبار الرسمي: الشروط، التسجيل، وأسلوب الأسئلة", type: "دليل الاختبار", tag: "SHRM", color: "green" },
-  { title: "CMI Level 7 — Strategic Management", desc: "استراتيجيات القيادة والإدارة على المستوى السابع من CMI", type: "شهادة مهنية", tag: "CMI", color: "purple" },
-  { title: "OTHM Level 7 — Human Resource Management", desc: "مناهج إدارة الموارد البشرية على المستوى السابع من OTHM", type: "شهادة مهنية", tag: "OTHM", color: "purple" },
+  { title: "SHRM Learning System — Organization", desc: "Structure of the HR Function, Organizational Effectiveness & Development, Workforce Management, Employee & Labor Relations, Technology Management", type: "كتاب رسمي", tag: "SHRM", color: "blue", url: "https://www.shrm.org/store/products/Pages/LearningSystemContent.aspx" },
+  { title: "SHRM Learning System — People", desc: "HR Strategy, Talent Acquisition, Employee Engagement & Retention, Learning & Development, Total Rewards", type: "كتاب رسمي", tag: "SHRM", color: "blue", url: "https://www.shrm.org/store/products/Pages/LearningSystemContent.aspx" },
+  { title: "SHRM Learning System — Workplace", desc: "Managing a Global Workforce, Risk Management, Corporate Social Responsibility, U.S. Employment Law & Regulations", type: "كتاب رسمي", tag: "SHRM", color: "blue", url: "https://www.shrm.org/store/products/Pages/LearningSystemContent.aspx" },
+  { title: "SHRM Learning System — Competencies", desc: "Leadership & Navigation, Ethical Practice, Inclusion & Diversity, Relationship Management, Communication, Global Mindset, Business Acumen", type: "كتاب رسمي", tag: "SHRM", color: "blue", url: "https://www.shrm.org/store/products/Pages/LearningSystemContent.aspx" },
+  { title: "SHRM BoCK — Body of Competency & Knowledge", desc: "الإطار الرسمي لكفاءات ومعارف متخصصي الموارد البشرية", type: "مرجع أساسي", tag: "SHRM", color: "yellow", url: "https://www.shrm.org/certification/documents/body-of-competency-and-knowledge.pdf" },
+  { title: "SHRM-CP & SHRM-SCP Exam Window Guide", desc: "دليل الاختبار الرسمي: الشروط، التسجيل، وأسلوب الأسئلة", type: "دليل الاختبار", tag: "SHRM", color: "green", url: "https://www.shrm.org/certification/steps-to-certification/exam-cycle/Pages/default.aspx" },
+  { title: "CMI Level 7 — Strategic Management", desc: "استراتيجيات القيادة والإدارة على المستوى السابع من CMI", type: "شهادة مهنية", tag: "CMI", color: "purple", url: "https://www.managers.org.uk/qualifications-and-courses/qualifications/level-7/" },
+  { title: "OTHM Level 7 — Human Resource Management", desc: "مناهج إدارة الموارد البشرية على المستوى السابع من OTHM", type: "شهادة مهنية", tag: "OTHM", color: "purple", url: "https://othm.org.uk/othm-level-7-diploma-in-human-resource-management/" },
 ];
 
 const tagColors = { blue: "bg-blue-500/20 text-blue-300 border-blue-400/20", yellow: "bg-yellow-500/20 text-yellow-300 border-yellow-400/20", green: "bg-green-500/20 text-green-300 border-green-400/20", purple: "bg-purple-500/20 text-purple-300 border-purple-400/20" };
@@ -60,9 +60,9 @@ export default function ResourceLibrary() {
               <h3 className="text-white font-semibold text-sm mb-2 leading-relaxed">{r.title}</h3>
               <p className="text-white/50 text-xs leading-relaxed mb-4">{r.desc}</p>
               <div className="flex gap-2">
-                <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-white/50 border border-white/10 hover:bg-white/5 transition-colors">
-                  <ExternalLink className="w-3 h-3" /> عرض على SHRM.org
-                </button>
+                <a href={r.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-white/70 border border-yellow-400/30 bg-yellow-500/10 hover:bg-yellow-500/20 transition-colors">
+                  <ExternalLink className="w-3 h-3" /> فتح المصدر
+                </a>
               </div>
             </div>
           ))}
