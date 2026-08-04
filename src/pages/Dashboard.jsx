@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { Award, BookOpen, FileCheck, BarChart2, LogOut, ArrowLeft, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import SHRMLogo from "@/components/SHRMLogo";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -54,10 +55,7 @@ export default function Dashboard() {
       <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-700 rounded-xl flex items-center justify-center">
-              <Award className="w-4 h-4 text-white" />
-            </div>
-            <span className="font-heading font-bold text-lg text-gray-900">SHRM Academy</span>
+            <SHRMLogo size={40} showText={true} />
           </Link>
           <Button variant="ghost" size="sm" className="text-gray-500" onClick={() => base44.auth.logout("/")}>
             <LogOut className="w-4 h-4 ml-1" /> تسجيل الخروج
