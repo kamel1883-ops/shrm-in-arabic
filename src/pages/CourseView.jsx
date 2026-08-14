@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { Award, Play, FileCheck, Brain, ChevronLeft, ChevronRight, Lock, CheckCircle, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import ExamRunner from "@/components/ExamRunner";
 
 export default function CourseView() {
   const { courseId } = useParams();
@@ -16,6 +17,8 @@ export default function CourseView() {
   const [activeUnit, setActiveUnit] = useState(null);
   const [activeTab, setActiveTab] = useState("video");
   const [progress, setProgress] = useState([]);
+  const [view, setView] = useState("units"); // units | exams
+  const [openExam, setOpenExam] = useState(null); // exam number 1..10
 
   useEffect(() => {
     loadData();
@@ -124,7 +127,55 @@ export default function CourseView() {
             </div>
           )}
 
-          {activeUnit ? (
+          {/* Mode switcher */}
+          <div className="flex items-center gap-2 mb-6 border border-gray-200 rounded-xl p-1 bg-white w-fit">
+            <button
+              onClick={() => { setView("units"); setOpenExam(null); }}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition ${view === "units" ? "bg-blue-700 text-white" : "text-gray-500 hover:text-gray-800"}`}
+            >
+              محتوى الوحدات
+            </button>
+            <button
+              onClick={() => { setView("exams"); setOpenExam(null); }}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition ${view === "exams" ? "bg-blue-700 text-white" : "text-gray-500 hover:text-gray-800"}`}
+            >
+              الامتحانات الكاملة (10)
+            </button>
+          </div>
+
+          {view === "exams" ? (
+            openExam ? (
+              <ExamRunner
+                examNumber={openExam}
+                durationMinutes={230}
+                feedbackMode="instant"
+                certType={course.certificate_type}
+                onBack={() => setOpenExam(null)}
+              />
+            ) : (
+              <div>
+                <div className="bg-white rounded-xl border border-gray-200 p-5 mb-5">
+                  <h3 className="font-heading text-lg font-bold text-gray-900 mb-1">الامتحانات الكاملة — {course.certificate_type}</h3>
+                  <p className="text-gray-500 text-sm mb-4">10 امتحانات لكل امتحان 134 سؤالاً و230 دقيقة. وضع التعلم الفوري يُظهر النتيجة والشرح فور الإجابة على كل سؤال.</p>
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                    {Array.from({ length: 10 }, (_, i) => i + 1).map(n => (
+                      <button
+                        key={n}
+                        onClick={() => setOpenExam(n)}
+                        className="border border-gray-200 rounded-xl p-4 hover:border-blue-400 hover:bg-blue-50 transition text-center"
+                      >
+                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                          <span className="text-blue-700 font-bold">{n}</span>
+                        </div>
+                        <p className="text-sm font-medium text-gray-800">امتحان {n}</p>
+                        <p className="text-xs text-gray-400">134 سؤال</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )
+          ) : activeUnit ? (
             <>
               <div className="bg-white rounded-xl border border-gray-200 mb-4">
                 {/* Tabs */}
