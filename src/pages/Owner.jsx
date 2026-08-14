@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -144,14 +145,17 @@ export default function Owner() {
               <p className="text-gray-400 text-xs" dir="ltr">{email}</p>
             </div>
           </div>
-          <Button variant="ghost" size="sm" className="text-gray-500" onClick={handleLogout}>
-            <LogOut className="w-4 h-4 ml-1" /> خروج
-          </Button>
+          <div className="flex items-center gap-1">
+            <Link to="/" className="px-3 py-1.5 rounded-lg text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition-colors">الرئيسية</Link>
+            <Button variant="ghost" size="sm" className="text-gray-500" onClick={handleLogout}>
+              <LogOut className="w-4 h-4 ml-1" /> خروج
+            </Button>
+          </div>
         </div>
       </header>
 
       <div className="max-w-5xl mx-auto px-4 py-10">
-        <h1 className="font-heading text-3xl font-bold text-gray-900 mb-2">مرحباً كامل 👋</h1>
+        <h1 className="font-heading text-3xl font-bold text-gray-900 mb-2">مرحباً 👋</h1>
         <p className="text-gray-500 mb-8">إحصائيات حقيقية لعملاء المنصة واشتراكاتهم</p>
 
         {statsLoading ? (

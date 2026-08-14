@@ -2,7 +2,7 @@ import React from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import SHRMLogo from "@/components/SHRMLogo";
-import { LayoutDashboard, Zap, BookOpen, ListTree, BarChart3, Award, Library, User, Bell, LogOut, Store } from "lucide-react";
+import { LayoutDashboard, Zap, BookOpen, ListTree, BarChart3, Award, Library, User, Bell, LogOut, Store, Home } from "lucide-react";
 
 const NAV = [
   { to: "/dashboard", label: "لوحة الطالب", icon: LayoutDashboard },
@@ -29,9 +29,14 @@ export default function StudentLayout() {
       <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
         <div className="px-4 py-3 flex items-center justify-between">
           <Link to="/dashboard"><SHRMLogo size={40} showText={true} /></Link>
-          <Link to="/courses" className="flex items-center gap-1.5 text-sm text-blue-700 hover:text-blue-900 font-medium">
-            <Store className="w-4 h-4" /> تصفّح الدورات
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link to="/" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 font-medium">
+              <Home className="w-4 h-4" /> الرئيسية
+            </Link>
+            <Link to="/courses" className="flex items-center gap-1.5 text-sm text-blue-700 hover:text-blue-900 font-medium">
+              <Store className="w-4 h-4" /> تصفّح الدورات
+            </Link>
+          </div>
         </div>
       </header>
 

@@ -4,8 +4,6 @@ import { base44 } from "@/api/base44Client";
 import { Clock, ChevronLeft, ChevronRight, Flag, CheckCircle, XCircle, Lock, AlertTriangle } from "lucide-react";
 import { getExamQuestions } from "@/data/examQuestions";
 
-const PERSONAL_PHOTO = "https://media.base44.com/images/public/6a6dcc665d711f7ab11f51c9/bc2499f6c_WhatsAppImage2026-08-01at12947PM.jpeg";
-
 export default function ExamSimulation() {
   const { courseId } = useParams();
   const navigate = useNavigate();

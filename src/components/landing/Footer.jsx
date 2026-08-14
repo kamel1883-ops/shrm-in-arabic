@@ -13,10 +13,9 @@ const COLS = [
     { label: "إنشاء حساب", to: "/register" },
     { label: "لوحة الطالب", to: "/dashboard" },
   ] },
-  { title: "الماضي", links: [
+  { title: "الأدوات", links: [
     { label: "دليل الشهادات", to: "/certification-guide" },
     { label: "مكتبة المصادر", to: "/resource-library" },
-    { label: "صفحة المالك", to: "/owner" },
   ] },
 ];
 

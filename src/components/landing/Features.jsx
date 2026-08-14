@@ -10,6 +10,9 @@ const FEATURES = [
   { icon: GraduationCap, title: "مدرب معتمد", desc: "إشراف حاصل على SHRM-SCP ودرجة الماجستير في إدارة رأس المال البشري." },
 ];
 
+import { JADARA_URL } from "@/data/brand";
+import { Building2, ArrowUpRight } from "lucide-react";
+
 export default function Features() {
   return (
     <section className="max-w-6xl mx-auto px-6 py-16">
@@ -28,6 +31,27 @@ export default function Features() {
             <p className="text-white/60 text-sm leading-relaxed">{f.desc}</p>
           </div>
         ))}
+      </div>
+
+      {/* منصة جدارة — ميزة مميزة */}
+      <div className="mt-6 rounded-2xl border border-yellow-400/25 p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center gap-5" style={{ background: "linear-gradient(135deg,rgba(245,158,11,0.08),rgba(30,58,138,0.15))" }}>
+        <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0" style={{ background: "linear-gradient(135deg,#F59E0B,#D97706)" }}>
+          <Building2 className="w-7 h-7 text-black" />
+        </div>
+        <div className="flex-1">
+          <h3 className="font-heading text-xl font-bold text-white mb-1">منصة جدارة لإدارة الموارد البشرية</h3>
+          <p className="text-white/60 text-sm leading-relaxed">
+            منشأة على يد مؤسس «شرم بالعربي»، منصة جدارة بوابة عملية تكميلية لتطبيق استراتيجيات الموارد البشرية في بيئة العمل — امتداد تجريبي لما تتعلّمه هنا.
+          </p>
+        </div>
+        {JADARA_URL && JADARA_URL !== "#" ? (
+          <a href={JADARA_URL} target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-5 py-3 rounded-xl font-bold text-black text-sm shrink-0" style={{ background: "linear-gradient(135deg,#F59E0B,#D97706)" }}>
+            زيارة منصة جدارة <ArrowUpRight className="w-4 h-4" />
+          </a>
+        ) : (
+          <span className="text-white/40 text-xs md:self-center shrink-0">رابط قريباً</span>
+        )}
       </div>
     </section>
   );
