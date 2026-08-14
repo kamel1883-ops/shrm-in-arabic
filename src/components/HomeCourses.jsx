@@ -51,12 +51,12 @@ export default function HomeCourses() {
             </div>
             <h3 className="font-heading text-xl font-bold text-white mb-1">دورة {activeTab} الشاملة</h3>
             <p className="text-white/70 text-xs leading-relaxed mb-3">
-              محتوى تعليمي متكامل: 10 فيديوهات، 100+ فلاش كارد، 10 اختبارات وحدة + 10 امتحانات محاكاة كاملة (134 سؤال لكل امتحان).
+              محتوى تعليمي متكامل: 20 فيديو تعليمي، 100+ فلاش كارد، 10 اختبارات وحدة + 10 امتحانات محاكاة كاملة (134 سؤال لكل امتحان).
             </p>
             <div className="grid grid-cols-3 gap-2 mb-4 text-center">
               <div className="rounded-xl py-2 px-1 bg-white/10">
                 <Play className="w-4 h-4 text-yellow-300 mx-auto mb-1" />
-                <div className="text-sm font-bold text-white">10</div>
+                <div className="text-sm font-bold text-white">20</div>
                 <div className="text-xs text-white/50">فيديو</div>
               </div>
               <div className="rounded-xl py-2 px-1 bg-white/10">
