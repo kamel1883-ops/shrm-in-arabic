@@ -5,12 +5,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Plus, Trash2, Save, FileCheck } from "lucide-react";
+import { getExamOfferingForCert } from "@/data/examQuestions";
 
 export default function AdminQuestionManager({ courses, selectedCourseId, setSelectedCourseId }) {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [adding, setAdding] = useState(false);
   const [newQ, setNewQ] = useState({ question_text: "", option_a: "", option_b: "", option_c: "", option_d: "", correct_answer: "a", explanation: "", question_type: "exam_simulation" });
+
+  const selectedCourse = courses.find(c => c.id === selectedCourseId);
+  const examOffering = selectedCourse ? getExamOfferingForCert(selectedCourse.certificate_type) : 0;
 
   const loadQuestions = useCallback(async () => {
     if (!selectedCourseId) return;
@@ -46,7 +50,9 @@ export default function AdminQuestionManager({ courses, selectedCourseId, setSel
           <select className="rounded-lg bg-white/5 border border-white/10 text-white px-3 py-2 text-sm" value={selectedCourseId || ""} onChange={e => setSelectedCourseId(e.target.value)}>
             {courses.map(c => <option key={c.id} value={c.id} className="bg-slate-800">{c.title}</option>)}
           </select>
-          <span className="text-white/40 text-sm">{questions.length} سؤال</span>
+          <span className="text-white/40 text-sm">
+            {examOffering} سؤال محاكاة (بنك مدمج) · {questions.length} يدوي
+          </span>
         </div>
         <Button size="sm" style={{ background: "linear-gradient(135deg,#F59E0B,#D97706)", color: "#000" }} onClick={() => setAdding(!adding)}>
           <Plus className="w-4 h-4 ml-1" /> إضافة سؤال
@@ -119,7 +125,12 @@ export default function AdminQuestionManager({ courses, selectedCourseId, setSel
               </div>
             </div>
           ))}
-          {questions.length === 0 && <p className="text-white/30 text-sm text-center py-8">لا توجد أسئلة بعد.</p>}
+          {questions.length === 0 && (
+            <div className="text-center py-8 space-y-1">
+              <p className="text-white/50 text-sm">لا توجد أسئلة يدوية مضافة لهذه الدورة.</p>
+              <p className="text-white/30 text-xs">الامتحانات تُقدَّم من بنك مدمج ({examOffering} سؤالاً عبر 10 امتحانات). استخدم "إضافة سؤال" لإضافة أسئلة يدوية إضافية لقاعدة البيانات.</p>
+            </div>
+          )}
         </div>
       )}
     </div>

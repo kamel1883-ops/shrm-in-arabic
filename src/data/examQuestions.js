@@ -325,4 +325,13 @@ export const EXAMS_PER_CERT = 10;
 export const EXAM_CERTS = ["SHRM-CP", "SHRM-SCP"];
 export const TOTAL_EXAM_QUESTIONS = QUESTIONS_PER_EXAM * EXAMS_PER_CERT * EXAM_CERTS.length; // 2680
 
+// حجم بنك الأسئلة المدمج لكل شهادة (عدد الأسئلة الفريدة المتاحة للسحب منها عبر الامتحانات)
+export function getBankSize(certificateType = "SHRM-CP") {
+  return (BANKS[certificateType] || QUESTION_BANK).length;
+}
+// إجمالي أسئلة المحاكاة المعروضة لدورة ما = عدد الامتحانات × حجم البنك (1340 لكل دورة)
+export function getExamOfferingForCert(certificateType = "SHRM-CP") {
+  return getBankSize(certificateType) * EXAMS_PER_CERT;
+}
+
 export default QUESTION_BANK;
