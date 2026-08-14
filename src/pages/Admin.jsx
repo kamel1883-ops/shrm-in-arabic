@@ -9,7 +9,7 @@ import SHRMLogo from "@/components/SHRMLogo";
 import { BookOpen, FileCheck, Brain, Video, Plus, Trash2, Save, ArrowRight, BarChart3, Upload } from "lucide-react";
 import AdminUnitManager from "@/components/admin/AdminUnitManager";
 import AdminFlashcardManager from "@/components/admin/AdminFlashcardManager";
-import AdminQuestionManager from "@/components/admin/AdminQuestionManager";
+import AdminExamManager from "@/components/admin/AdminExamManager";
 import { TOTAL_EXAM_QUESTIONS } from "@/data/examQuestions";
 
 export default function Admin() {
@@ -92,7 +92,7 @@ export default function Admin() {
     { key: "courses", label: "الدورات", icon: BookOpen },
     { key: "units", label: "الوحدات والفيديوهات", icon: Video },
     { key: "flashcards", label: "الفلاش كاردز", icon: Brain },
-    { key: "questions", label: "الأسئلة", icon: FileCheck },
+    { key: "questions", label: "الامتحانات", icon: FileCheck },
   ];
 
   return (
@@ -189,7 +189,7 @@ export default function Admin() {
         )}
 
         {activeTab === "questions" && (
-          <AdminQuestionManager courses={courses} selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId} />
+          <AdminExamManager courses={courses} selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId} />
         )}
       </div>
     </div>
