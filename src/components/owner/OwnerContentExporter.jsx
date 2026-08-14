@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 import { COURSE_LESSONS } from "@/data/courseLessons";
 import { getBankForCert, EXAMS_PER_CERT } from "@/data/examQuestions";
 import { downloadWordDoc, seededShuffle, esc } from "@/lib/wordExport";
-import { Download, FileText, Eye, Loader2, Video, ClipboardList, AlertCircle } from "lucide-react";
+import LessonVideoExporter from "@/components/owner/LessonVideoExporter";
+import FlashcardPptxExporter from "@/components/owner/FlashcardPptxExporter";
+import { Download, FileText, Eye, Loader2, Video, ClipboardList, AlertCircle, Film, Layers } from "lucide-react";
 
 const CERTS = ["SHRM-CP", "SHRM-SCP"];
 const QUESTION_LABELS = { a: "أ", b: "ب", c: "ج", d: "د" };
@@ -49,6 +51,7 @@ export default function OwnerContentExporter() {
   const [records, setRecords] = useState({});
   const [loading, setLoading] = useState(true);
   const [previewLesson, setPreviewLesson] = useState(null);
+  const [videoLesson, setVideoLesson] = useState(null);
   const [downloading, setDownloading] = useState(null);
 
   useEffect(() => {
@@ -155,8 +158,13 @@ export default function OwnerContentExporter() {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" className="border-white/15 text-white/60 hover:bg-white/10 flex-1" onClick={() => setPreviewLesson(lesson)}>
+                    <Button size="sm" variant="outline" className="border-white/15 text-white/60 hover:bg-white/10" onClick={() => setPreviewLesson(lesson)}>
                       <Eye className="w-4 h-4 ml-1" /> معاينة
+                    </Button>
+                    <Button size="sm" variant="outline" className="border-white/15 text-white/60 hover:bg-white/10" disabled={!ready}
+                      title={ready ? "توليد وتحميل فيديو MP4" : "ولّد الدرس أولاً"}
+                      onClick={() => ready && setVideoLesson(resolveLesson(lesson))}>
+                      <Film className="w-4 h-4 ml-1" /> MP4
                     </Button>
                     <Button size="sm" className="flex-1" disabled={downloading === key}
                       style={{ background: "linear-gradient(135deg,#F59E0B,#D97706)", color: "#000" }}
@@ -201,6 +209,15 @@ export default function OwnerContentExporter() {
         </p>
       </div>
 
+      {/* قسم الفلاش كاردز — PowerPoint */}
+      <div>
+        <div className="flex items-center gap-2 mb-3">
+          <Layers className="w-5 h-5 text-yellow-400" />
+          <h3 className="font-heading font-bold text-white text-base">الفلاش كاردز — {cert} (PowerPoint)</h3>
+        </div>
+        <FlashcardPptxExporter cert={cert} />
+      </div>
+
       {/* نافذة معاينة الدرس */}
       {previewLesson && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.7)" }} onClick={() => setPreviewLesson(null)}>
@@ -225,6 +242,15 @@ export default function OwnerContentExporter() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* نافذة توليد فيديو الدرس */}
+      {videoLesson && (
+        <LessonVideoExporter
+          lesson={videoLesson}
+          cert={cert}
+          onClose={() => setVideoLesson(null)}
+        />
       )}
     </div>
   );
