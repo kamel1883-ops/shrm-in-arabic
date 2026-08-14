@@ -5,6 +5,7 @@ import { Award, Play, FileCheck, Brain, ChevronLeft, ChevronRight, Lock, CheckCi
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import ExamRunner from "@/components/ExamRunner";
+import ScenarioExamRunner from "@/components/ScenarioExamRunner";
 import VideoLessonPlayer from "@/components/VideoLessonPlayer";
 import { getLesson } from "@/data/courseLessons";
 
@@ -143,9 +144,17 @@ export default function CourseView() {
             >
               الامتحانات الكاملة (10)
             </button>
+            <button
+              onClick={() => { setView("scenario"); setOpenExam(null); }}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition ${view === "scenario" ? "bg-indigo-700 text-white" : "text-gray-500 hover:text-gray-800"}`}
+            >
+              السيناريو (SJT)
+            </button>
           </div>
 
-          {view === "exams" ? (
+          {view === "scenario" ? (
+            <ScenarioExamRunner certType={course.certificate_type} onBack={() => setView("units")} />
+          ) : view === "exams" ? (
             openExam ? (
               <ExamRunner
                 examNumber={openExam}
