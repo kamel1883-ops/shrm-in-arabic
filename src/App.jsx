@@ -10,7 +10,6 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 
 // Pages
 import Home from './pages/Home';
-import Admin from './pages/Admin';
 import Courses from './pages/Courses';
 import CourseView from './pages/CourseView';
 import ExamSimulation from './pages/ExamSimulation';
@@ -68,7 +67,6 @@ const AuthenticatedApp = () => {
       <Route path="/enrollment-success" element={<EnrollmentSuccess />} />
       <Route path="/checkout/:courseId" element={<Checkout />} />
       <Route path="/instructor-about" element={<InstructorAbout />} />
-      <Route path="/admin" element={<Admin />} />
       <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
         <Route element={<StudentLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
