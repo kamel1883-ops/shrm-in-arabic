@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import SHRMLogo from "@/components/SHRMLogo";
-import { Mail, Lock, Loader2, LogOut, Users, BookOpen, FileCheck, BarChart3, ShieldAlert, ArrowLeft } from "lucide-react";
+import { Mail, Lock, Loader2, LogOut, Users, BookOpen, FileCheck, BarChart3, ShieldAlert, ArrowLeft, LayoutDashboard, Settings } from "lucide-react";
+import OwnerManagement from "@/components/owner/OwnerManagement";
 
 export default function Owner() {
   const [authed, setAuthed] = useState(false);
@@ -16,6 +17,7 @@ export default function Owner() {
   const [stats, setStats] = useState(null);
   const [statsLoading, setStatsLoading] = useState(false);
   const [denied, setDenied] = useState(false);
+  const [section, setSection] = useState("stats"); // "stats" | "manage"
 
   useEffect(() => {
     (async () => {
@@ -146,6 +148,14 @@ export default function Owner() {
             </div>
           </div>
           <div className="flex items-center gap-1">
+            <button onClick={() => setSection("stats")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${section === "stats" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-800"}`}>
+              <LayoutDashboard className="w-4 h-4" /> الإحصائيات
+            </button>
+            <button onClick={() => setSection("manage")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${section === "manage" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-800"}`}>
+              <Settings className="w-4 h-4" /> إدارة المحتوى
+            </button>
             <Link to="/" className="px-3 py-1.5 rounded-lg text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition-colors">الرئيسية</Link>
             <Button variant="ghost" size="sm" className="text-gray-500" onClick={handleLogout}>
               <LogOut className="w-4 h-4 ml-1" /> خروج
@@ -156,9 +166,13 @@ export default function Owner() {
 
       <div className="max-w-5xl mx-auto px-4 py-10">
         <h1 className="font-heading text-3xl font-bold text-gray-900 mb-2">مرحباً 👋</h1>
-        <p className="text-gray-500 mb-8">إحصائيات حقيقية لعملاء المنصة واشتراكاتهم</p>
+        <p className="text-gray-500 mb-8">
+          {section === "stats" ? "إحصائيات حقيقية لعملاء المنصة واشتراكاتهم" : "إدارة الدورات والوحدات والفلاش كاردز والامتحانات"}
+        </p>
 
-        {statsLoading ? (
+        {section === "manage" ? (
+          <OwnerManagement />
+        ) : statsLoading ? (
           <div className="flex justify-center py-20">
             <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
           </div>
