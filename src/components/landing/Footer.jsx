@@ -28,7 +28,6 @@ export default function Footer() {
           <p className="text-white/40 text-xs mt-4 leading-relaxed">
             منصة تعليمية متخصّصة في التحضير لامتحانات SHRM-CP و SHRM-SCP بالعربية.
           </p>
-          <p className="text-white/30 text-xs mt-2">إعداد وتطوير: كامل إسماعيل</p>
         </div>
         {COLS.map(col => (
           <div key={col.title}>
