@@ -315,7 +315,14 @@ const BANKS = { "SHRM-CP": QUESTION_BANK, "SHRM-SCP": SCP_BANK };
 export function getExamQuestions(examNumber, certificateType = "SHRM-CP") {
   const bank = BANKS[certificateType] || QUESTION_BANK;
   const shuffled = shuffleArray(bank);
-  return shuffled.slice(0, Math.min(134, shuffled.length));
+  return shuffled.slice(0, Math.min(QUESTIONS_PER_EXAM, shuffled.length));
 }
+
+// عرض المحاكاة الكامل المعروض على الطالب عبر المنصة:
+// 10 امتحانات × 134 سؤالاً × شهادتين (CP و SCP) = 2680 سؤالاً معروضاً
+export const QUESTIONS_PER_EXAM = 134;
+export const EXAMS_PER_CERT = 10;
+export const EXAM_CERTS = ["SHRM-CP", "SHRM-SCP"];
+export const TOTAL_EXAM_QUESTIONS = QUESTIONS_PER_EXAM * EXAMS_PER_CERT * EXAM_CERTS.length; // 2680
 
 export default QUESTION_BANK;

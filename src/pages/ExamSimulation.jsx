@@ -42,7 +42,7 @@ export default function ExamSimulation() {
       // Prefer DB bank for this specific course (certificate-specific); else use local cert bank
       const cert = c.certificate_type;
       const dbQs = await base44.entities.Question.filter({ course_id: courseId, question_type: "exam_simulation" });
-      if (dbQs.length > 0) {
+      if (dbQs.length >= 134) {
         const shuffled = [...dbQs].sort(() => Math.random() - 0.5);
         setQuestions(shuffled.slice(0, 134));
       } else {

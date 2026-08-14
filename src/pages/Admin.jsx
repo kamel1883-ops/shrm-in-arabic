@@ -10,6 +10,7 @@ import { BookOpen, FileCheck, Brain, Video, Plus, Trash2, Save, ArrowRight, BarC
 import AdminUnitManager from "@/components/admin/AdminUnitManager";
 import AdminFlashcardManager from "@/components/admin/AdminFlashcardManager";
 import AdminQuestionManager from "@/components/admin/AdminQuestionManager";
+import { TOTAL_EXAM_QUESTIONS } from "@/data/examQuestions";
 
 export default function Admin() {
   const [user, setUser] = useState(null);
@@ -123,7 +124,7 @@ export default function Admin() {
               { label: "الدورات", val: courses.length, icon: BookOpen, color: "text-blue-400" },
               { label: "الوحدات", val: counts.units, icon: Video, color: "text-green-400" },
               { label: "الفلاش كاردز", val: counts.flashcards, icon: Brain, color: "text-yellow-400" },
-              { label: "الأسئلة", val: counts.questions, icon: FileCheck, color: "text-purple-400" },
+              { label: "الأسئلة", val: TOTAL_EXAM_QUESTIONS, icon: FileCheck, color: "text-purple-400" },
             ].map(s => (
               <div key={s.label} className="rounded-xl border border-white/10 p-5" style={{ background: "rgba(13,26,53,0.7)" }}>
                 <s.icon className={`w-6 h-6 ${s.color} mb-3`} />
