@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";
 import SHRMLogo from "@/components/SHRMLogo";
-import { ArrowLeft, GraduationCap, Award, BadgeCheck, Building2, Star, CheckCircle2, Sparkles } from "lucide-react";
+import { ArrowLeft, GraduationCap, Award, BadgeCheck, Building2, Star } from "lucide-react";
 import { JADARA_URL } from "@/data/brand";
 
-const STUDENT_M = "https://media.base44.com/images/public/6a6dcc665d711f7ab11f51c9/86b66db13_generated_image.png";
-const STUDENT_F = "https://media.base44.com/images/public/6a6dcc665d711f7ab11f51c9/aff81d418_generated_image.png";
+const SCENE_M = "https://media.base44.com/images/public/6a6dcc665d711f7ab11f51c9/097be9a94_generated_image.png";
+const SCENE_F = "https://media.base44.com/images/public/6a6dcc665d711f7ab11f51c9/74bab51a5_generated_image.png";
 
 const credentials = [
   { icon: Building2, text: "مؤسس منصة جدارة لإدارة الموارد البشرية", href: JADARA_URL },
@@ -23,7 +23,7 @@ export default function Hero() {
 
       <div className="relative max-w-6xl mx-auto px-6 py-14 md:py-20 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
-        {/* النص — يمين في الـRTL */}
+        {/* النص */}
         <div className="text-center lg:text-right order-2 lg:order-1">
           <div className="flex justify-center lg:justify-start mb-5">
             <SHRMLogo size={68} showText={true} />
@@ -60,56 +60,32 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* البطاقة البصرية — الطالبان (افتراضيان بالذكاء الاصطناعي) */}
+        {/* مشاهد الدرسة مع كتب SHRM */}
         <div className="order-1 lg:order-2 flex justify-center">
           <div className="relative w-full max-w-sm">
-            <div className="absolute -inset-3 rounded-[2rem] opacity-25 blur-2xl" style={{ background: "radial-gradient(circle at 50% 40%,#F59E0B 0%,transparent 70%)" }} />
-            <div className="relative rounded-[1.75rem] border border-white/10 p-5 backdrop-blur-sm" style={{ background: "linear-gradient(155deg,rgba(13,31,60,0.85),rgba(6,20,58,0.85))" }}>
-              {/* رأس البطاقة */}
-              <div className="flex items-center justify-between mb-4">
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full text-black" style={{ background: "linear-gradient(135deg,#F59E0B,#D97706)" }}>
-                  <Sparkles className="w-3.5 h-3.5" /> طلابنا المتفوّقون
-                </span>
-                <div className="flex items-center gap-1 text-xs text-white/70">
-                  <span className="font-bold text-yellow-400">4.9</span>
-                  {Array.from({ length: 5 }).map((_, j) => <Star key={j} className="w-3 h-3 fill-yellow-400 text-yellow-400" />)}
-                </div>
-              </div>
-
-              {/* الطالبان — صور افتراضية بالذكاء الاصطناعي */}
+            <div className="absolute -inset-3 rounded-[2rem] opacity-25 blur-2xl" style={{ background: "radial-gradient(circle at 50% 40%,#3B82F6 0%,transparent 70%)" }} />
+            <div className="relative rounded-[1.75rem] border border-white/10 p-4 backdrop-blur-sm" style={{ background: "linear-gradient(155deg,rgba(13,31,60,0.82),rgba(6,20,58,0.82))" }}>
               <div className="grid grid-cols-2 gap-3">
-                <div className="relative">
-                  <div className="absolute inset-0 rounded-2xl ring-1 ring-yellow-400/30 pointer-events-none" />
-                  <Image src={STUDENT_F} className="w-full h-44 rounded-2xl object-cover" fittingType="fill" />
-                  <div className="mt-2 text-center">
-                    <p className="text-white text-xs font-medium">مختصة SHRM-SCP</p>
-                  </div>
+                <div className="relative overflow-hidden rounded-2xl">
+                  <div className="absolute inset-0 ring-1 ring-blue-400/25 rounded-2xl pointer-events-none" />
+                  <Image src={SCENE_F} className="w-full h-56 rounded-2xl object-cover" fittingType="fill" />
                 </div>
-                <div className="relative">
-                  <div className="absolute inset-0 rounded-2xl ring-1 ring-blue-400/30 pointer-events-none" />
-                  <Image src={STUDENT_M} className="w-full h-44 rounded-2xl object-cover" fittingType="fill" />
-                  <div className="mt-2 text-center">
-                    <p className="text-white text-xs font-medium">متدرّب SHRM-CP</p>
-                  </div>
+                <div className="relative overflow-hidden rounded-2xl">
+                  <div className="absolute inset-0 ring-1 ring-yellow-400/25 rounded-2xl pointer-events-none" />
+                  <Image src={SCENE_M} className="w-full h-56 rounded-2xl object-cover" fittingType="fill" />
                 </div>
               </div>
 
-              {/* شارات النتائج */}
-              <div className="grid grid-cols-2 gap-2 mt-4">
-                <div className="flex items-center gap-2 rounded-xl px-3 py-2.5" style={{ background: "rgba(16,185,129,0.10)", border: "1px solid rgba(16,185,129,0.25)" }}>
-                  <CheckCircle2 className="w-4 h-4 text-green-400 shrink-0" />
-                  <span className="text-white/85 text-xs font-medium">اجتاز من أول مرة</span>
+              {/* شارة نتيجة واحدة */}
+              <div className="flex items-center justify-between gap-2 mt-3 px-1">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-0.5">
+                    {Array.from({ length: 5 }).map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />)}
+                  </div>
+                  <span className="text-white/80 text-xs font-medium">SHRM Learning System</span>
                 </div>
-                <div className="flex items-center gap-2 rounded-xl px-3 py-2.5" style={{ background: "rgba(245,158,11,0.10)", border: "1px solid rgba(245,158,11,0.25)" }}>
-                  <Award className="w-4 h-4 text-yellow-400 shrink-0" />
-                  <span className="text-white/85 text-xs font-medium">متوسط 92%</span>
-                </div>
+                <span className="text-yellow-400 text-xs font-bold">منهج رسمي معتمد</span>
               </div>
-
-              {/* تنويه */}
-              <p className="text-white/35 text-[10px] leading-relaxed text-center mt-3">
-                صور ولّدتها الذكاء الاصطناعي لأغراض العرض التوضيحي — لا تمثّل أي شخص حقيقي.
-              </p>
             </div>
           </div>
         </div>
