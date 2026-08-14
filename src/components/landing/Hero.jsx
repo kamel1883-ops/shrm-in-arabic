@@ -18,8 +18,9 @@ const credentials = [
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden" style={{ background: "linear-gradient(135deg,#0d1f3c 0%,#1a2f50 40%,#0d1a35 100%)" }}>
-      <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "radial-gradient(circle at 70% 30%,#3B82F6 0%,transparent 60%)" }} />
+    <section className="relative overflow-hidden" style={{ background: "linear-gradient(135deg,#081330 0%,#10284f 28%,#0d2a63 52%,#0a1c45 78%,#06112e 100%)" }}>
+      {/* توهجات اللون الفخمة */}
+      <div className="absolute inset-0 opacity-60" style={{ backgroundImage: "radial-gradient(circle at 12% 18%,rgba(59,130,246,0.28) 0%,transparent 42%), radial-gradient(circle at 88% 78%,rgba(245,158,11,0.20) 0%,transparent 40%), radial-gradient(circle at 70% 8%,rgba(99,102,241,0.18) 0%,transparent 35%)" }} />
 
       <div className="relative max-w-6xl mx-auto px-6 py-14 md:py-20 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
@@ -28,10 +29,11 @@ export default function Hero() {
           <div className="flex justify-center lg:justify-start mb-5">
             <SHRMLogo size={68} showText={true} />
           </div>
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight" style={{ color: "#F59E0B", textShadow: "0 0 40px rgba(245,158,11,0.22)" }}>
-            إتقان الموارد البشرية والاستعداد لامتحان SHRM
+          <h1 className="font-heading font-bold mb-5" style={{ color: "#F59E0B", textShadow: "0 0 44px rgba(245,158,11,0.24)", lineHeight: 1.5, fontSize: "clamp(2rem,4.4vw,3.6rem)" }}>
+            <span className="block">إتقان الموارد البشرية</span>
+            <span className="block mt-2" style={{ color: "#FFFFFF" }}>والاستعداد لامتحان <span style={{ color: "#F59E0B" }}>SHRM</span></span>
           </h1>
-          <p className="text-blue-200 text-base md:text-lg max-w-xl lg:max-w-none mb-7 leading-relaxed">
+          <p className="text-blue-100 text-base md:text-lg max-w-xl lg:max-w-none mb-7 leading-relaxed">
             منصة تعليمية متكاملة بالعربية لتحضير شهادتي SHRM-CP و SHRM-SCP — فيديوهات، فلاش كاردز، ومحاكاة حقيقية للامتحان الرسمي.
           </p>
           <div className="flex flex-wrap gap-2.5 justify-center lg:justify-start mb-8">
@@ -56,31 +58,30 @@ export default function Hero() {
           </div>
           <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
             <Link to="/courses"><Button size="lg" className="text-black font-bold" style={{ background: "linear-gradient(135deg,#F59E0B,#D97706)" }}>ابدأ التعلّم الآن <ArrowLeft className="w-4 h-4 mr-1" /></Button></Link>
-            <Link to="/blog"><Button size="lg" variant="outline" className="border-blue-400/40 text-blue-200 hover:bg-blue-500/10">اقرأ المدونة</Button></Link>
+            <Link to="/blog"><Button size="lg" variant="outline" className="border-blue-300/40 text-blue-100 hover:bg-blue-400/10">اقرأ المدونة</Button></Link>
           </div>
         </div>
 
-        {/* مشاهد الدرسة مع كتب SHRM */}
-        <div className="order-1 lg:order-2 flex justify-center">
-          <div className="relative w-full max-w-sm">
-            <div className="absolute -inset-3 rounded-[2rem] opacity-25 blur-2xl" style={{ background: "radial-gradient(circle at 50% 40%,#3B82F6 0%,transparent 70%)" }} />
-            <div className="relative rounded-[1.75rem] border border-white/10 p-4 backdrop-blur-sm" style={{ background: "linear-gradient(155deg,rgba(13,31,60,0.82),rgba(6,20,58,0.82))" }}>
-              <div className="grid grid-cols-2 gap-3">
+        {/* مشاهد الدراسة مع كتب SHRM — صور أكبر وموضوعة أسفل قليلاً */}
+        <div className="order-1 lg:order-2 flex justify-center mt-2 lg:mt-12">
+          <div className="relative w-full max-w-md">
+            <div className="absolute -inset-4 rounded-[2.2rem] opacity-30 blur-3xl" style={{ background: "radial-gradient(circle at 50% 40%,#3B82F6 0%,transparent 70%)" }} />
+            <div className="relative rounded-[1.75rem] border border-white/12 p-4 shadow-2xl backdrop-blur-sm" style={{ background: "linear-gradient(155deg,rgba(13,31,60,0.82),rgba(6,20,58,0.82))" }}>
+              <div className="grid grid-cols-2 gap-4">
                 <div className="relative overflow-hidden rounded-2xl">
-                  <div className="absolute inset-0 ring-1 ring-blue-400/25 rounded-2xl pointer-events-none" />
-                  <Image src={SCENE_F} className="w-full h-56 rounded-2xl object-cover" fittingType="fill" />
+                  <div className="absolute inset-0 ring-1 ring-blue-400/30 rounded-2xl pointer-events-none z-10" />
+                  <Image src={SCENE_F} className="w-full h-80 rounded-2xl object-cover" fittingType="fill" />
                 </div>
                 <div className="relative overflow-hidden rounded-2xl">
-                  <div className="absolute inset-0 ring-1 ring-yellow-400/25 rounded-2xl pointer-events-none" />
-                  <Image src={SCENE_M} className="w-full h-56 rounded-2xl object-cover" fittingType="fill" />
+                  <div className="absolute inset-0 ring-1 ring-yellow-400/30 rounded-2xl pointer-events-none z-10" />
+                  <Image src={SCENE_M} className="w-full h-80 rounded-2xl object-cover" fittingType="fill" />
                 </div>
               </div>
 
-              {/* شارة نتيجة واحدة */}
-              <div className="flex items-center justify-between gap-2 mt-3 px-1">
+              <div className="flex items-center justify-between gap-2 mt-4 px-1">
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-0.5">
-                    {Array.from({ length: 5 }).map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />)}
+                    {Array.from({ length: 5 }).map((_, j) => <Star key={j} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
                   </div>
                   <span className="text-white/80 text-xs font-medium">SHRM Learning System</span>
                 </div>

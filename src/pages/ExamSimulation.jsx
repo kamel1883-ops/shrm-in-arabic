@@ -39,14 +39,15 @@ export default function ExamSimulation() {
         const enr = await base44.entities.Enrollment.filter({ user_id: u.id, course_id: courseId, payment_status: "paid" });
         setEnrolled(enr.length > 0);
       }
-      // Prefer DB if it has the full 134-question bank; otherwise use local bank
+      // Prefer DB bank for this specific course (certificate-specific); else use local cert bank
+      const cert = c.certificate_type;
       const dbQs = await base44.entities.Question.filter({ course_id: courseId, question_type: "exam_simulation" });
-      if (dbQs.length >= 134) {
+      if (dbQs.length > 0) {
         const shuffled = [...dbQs].sort(() => Math.random() - 0.5);
         setQuestions(shuffled.slice(0, 134));
       } else {
-        // Local bank: 134 questions, shuffled differently per exam number
-        setQuestions(getExamQuestions(examNumber));
+        // Local bank: certificate-specific (CP/SCP), shuffled differently per exam number
+        setQuestions(getExamQuestions(examNumber, cert));
       }
     } catch (e) { console.error(e); }
     setLoading(false);
@@ -54,12 +55,13 @@ export default function ExamSimulation() {
 
   async function startExam() {
     // Re-shuffle questions for the selected exam number
+    const cert = course?.certificate_type;
     const dbQs = await base44.entities.Question.filter({ course_id: courseId, question_type: "exam_simulation" });
-    if (dbQs.length >= 134) {
+    if (dbQs.length > 0) {
       const shuffled = [...dbQs].sort(() => Math.random() - 0.5);
       setQuestions(shuffled.slice(0, 134));
     } else {
-      setQuestions(getExamQuestions(examNumber));
+      setQuestions(getExamQuestions(examNumber, cert));
     }
     setAnswers({});
     setFlagged(new Set());
@@ -139,7 +141,7 @@ export default function ExamSimulation() {
           <div className="bg-[#1a3a6b] px-8 py-6 text-white text-center">
             <p className="text-blue-200 text-sm mb-1">SHRM Certification · Practice Exam Package</p>
             <h1 className="font-heading text-2xl font-bold">{course.certificate_type} Practice Exam</h1>
-            <p className="text-blue-200 text-sm mt-1">10 exams × 134 questions each</p>
+            <p className="text-blue-200 text-sm mt-1">{questions.length || 134} سؤالاً لكل اختبار · 10 اختبارات</p>
           </div>
 
           <div className="px-8 py-8">
@@ -154,13 +156,13 @@ export default function ExamSimulation() {
                   </button>
                 ))}
               </div>
-              <p className="text-gray-500 text-xs mt-2">الاختبار الحالي: رقم {examNumber} — 134 سؤالاً · 230 دقيقة</p>
+              <p className="text-gray-500 text-xs mt-2">الاختبار الحالي: رقم {examNumber} — {questions.length || 134} سؤالاً · 230 دقيقة</p>
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 mb-6">
               {[
-                { label: "Number of Questions", val: 134 },
+                { label: "Number of Questions", val: questions.length || 134 },
                 { label: "Time Allowed", val: "3:50:00" },
                 { label: "Passing Standard", val: "200-800" },
               ].map(item => (
@@ -300,6 +302,9 @@ export default function ExamSimulation() {
   const answeredCount = Object.keys(answers).length;
   const flaggedCount = flagged.size;
   const unanswered = questions.length - answeredCount;
+  const domains = ['Organization', 'People', 'Workplace', 'Competencies'];
+  const seg = Math.max(1, Math.ceil(questions.length / 4));
+  const currentSection = domains[Math.min(3, Math.floor(current / seg))];
 
   return (
     <div className="min-h-screen font-body flex flex-col" style={{ background: "#f0f4f8" }} dir="rtl">
@@ -349,7 +354,7 @@ export default function ExamSimulation() {
               {/* Question header */}
               <div className="bg-[#1a3a6b] px-6 py-3 flex items-center justify-between">
                 <span className="text-white text-sm font-semibold">
-                  Section: {current < 34 ? 'Organization' : current < 68 ? 'People' : current < 102 ? 'Workplace' : 'Competencies'}
+                  Section: {currentSection}
                 </span>
                 <div className="flex items-center gap-3">
                   <span className="text-blue-200 text-sm">Question {current + 1} of {questions.length}</span>
