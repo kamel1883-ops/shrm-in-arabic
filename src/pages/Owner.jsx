@@ -112,14 +112,14 @@ export default function Owner() {
   // ===== DENIED (logged in but not owner) =====
   if (denied) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 font-body bg-gray-50" dir="rtl">
-        <div className="bg-white rounded-2xl border border-gray-200 p-8 max-w-md w-full text-center shadow-sm">
-          <div className="w-14 h-14 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
-            <ShieldAlert className="w-7 h-7 text-red-500" />
+      <div className="min-h-screen flex items-center justify-center px-4 font-body" style={{ background: "linear-gradient(160deg,#0a0f1e 0%,#0d1a35 55%,#0a1628 100%)" }} dir="rtl">
+        <div className="rounded-2xl border border-white/10 p-8 max-w-md w-full text-center" style={{ background: "rgba(13,26,53,0.7)" }}>
+          <div className="w-14 h-14 bg-red-500/15 rounded-full flex items-center justify-center mx-auto mb-4">
+            <ShieldAlert className="w-7 h-7 text-red-400" />
           </div>
-          <h1 className="font-heading text-xl font-bold text-gray-900 mb-2">لا تملك صلاحية المالك</h1>
-          <p className="text-gray-500 text-sm mb-6">هذا الحساب غير مصرّح له بالدخول لصفحة المالك.</p>
-          <Button onClick={handleLogout} variant="outline" className="w-full py-5"><LogOut className="w-4 h-4 ml-2" /> تسجيل الخروج</Button>
+          <h1 className="font-heading text-xl font-bold text-white mb-2">لا تملك صلاحية المالك</h1>
+          <p className="text-white/50 text-sm mb-6">هذا الحساب غير مصرّح له بالدخول لصفحة المالك.</p>
+          <Button onClick={handleLogout} variant="outline" className="w-full py-5 border-white/20 text-white/70 hover:bg-white/10"><LogOut className="w-4 h-4 ml-2" /> تسجيل الخروج</Button>
         </div>
       </div>
     );
@@ -137,36 +137,34 @@ export default function Owner() {
   ];
 
   return (
-    <div className="min-h-screen font-body bg-gray-50" dir="rtl">
-      <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <SHRMLogo size={40} showText={true} />
-            <div>
-              <p className="font-heading font-bold text-gray-900 text-sm">لوحة المالك</p>
-              <p className="text-gray-400 text-xs" dir="ltr">{email}</p>
-            </div>
+    <div className="min-h-screen font-body" style={{ background: "linear-gradient(160deg,#0a0f1e 0%,#0d1a35 55%,#0a1628 100%)" }} dir="rtl">
+      <header className="border-b border-white/10 px-6 py-4 flex items-center justify-between sticky top-0 z-40" style={{ background: "rgba(10,15,30,0.95)", backdropFilter: "blur(10px)" }}>
+        <div className="flex items-center gap-3">
+          <SHRMLogo size={40} showText={true} />
+          <div>
+            <p className="font-heading font-bold text-white text-sm">لوحة المالك</p>
+            <p className="text-white/40 text-xs" dir="ltr">{email}</p>
           </div>
-          <div className="flex items-center gap-1">
-            <button onClick={() => setSection("stats")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${section === "stats" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-800"}`}>
-              <LayoutDashboard className="w-4 h-4" /> الإحصائيات
-            </button>
-            <button onClick={() => setSection("manage")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${section === "manage" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-800"}`}>
-              <Settings className="w-4 h-4" /> إدارة المحتوى
-            </button>
-            <Link to="/" className="px-3 py-1.5 rounded-lg text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition-colors">الرئيسية</Link>
-            <Button variant="ghost" size="sm" className="text-gray-500" onClick={handleLogout}>
-              <LogOut className="w-4 h-4 ml-1" /> خروج
-            </Button>
-          </div>
+        </div>
+        <div className="flex items-center gap-1">
+          <button onClick={() => setSection("stats")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${section === "stats" ? "bg-yellow-400/15 text-yellow-400 border border-yellow-400/40" : "text-white/50 hover:bg-white/5 hover:text-white border border-transparent"}`}>
+            <LayoutDashboard className="w-4 h-4" /> الإحصائيات
+          </button>
+          <button onClick={() => setSection("manage")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${section === "manage" ? "bg-yellow-400/15 text-yellow-400 border border-yellow-400/40" : "text-white/50 hover:bg-white/5 hover:text-white border border-transparent"}`}>
+            <Settings className="w-4 h-4" /> إدارة المحتوى
+          </button>
+          <Link to="/" className="px-3 py-1.5 rounded-lg text-sm text-white/50 hover:bg-white/5 hover:text-white transition-colors">الرئيسية</Link>
+          <Button variant="ghost" size="sm" className="text-white/50 hover:bg-white/5 hover:text-white" onClick={handleLogout}>
+            <LogOut className="w-4 h-4 ml-1" /> خروج
+          </Button>
         </div>
       </header>
 
       <div className="max-w-5xl mx-auto px-4 py-10">
-        <h1 className="font-heading text-3xl font-bold text-gray-900 mb-2">مرحباً 👋</h1>
-        <p className="text-gray-500 mb-8">
+        <h1 className="font-heading text-3xl font-bold text-white mb-2">مرحباً 👋</h1>
+        <p className="text-white/50 mb-8">
           {section === "stats" ? "إحصائيات حقيقية لعملاء المنصة واشتراكاتهم" : "إدارة الدورات والوحدات والفلاش كاردز والامتحانات"}
         </p>
 
@@ -180,50 +178,50 @@ export default function Owner() {
           <>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">
               {cards.map(card => (
-                <div key={card.label} className="bg-white rounded-xl border border-gray-200 p-5">
+                <div key={card.label} className="rounded-xl border border-white/10 p-5" style={{ background: "rgba(13,26,53,0.7)" }}>
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-3 ${
-                    card.color === 'blue' ? 'bg-blue-100' : card.color === 'green' ? 'bg-green-100' :
-                    card.color === 'indigo' ? 'bg-indigo-100' : card.color === 'purple' ? 'bg-purple-100' :
-                    card.color === 'amber' ? 'bg-amber-100' : 'bg-rose-100'}`}>
+                    card.color === 'blue' ? 'bg-blue-500/20' : card.color === 'green' ? 'bg-green-500/20' :
+                    card.color === 'indigo' ? 'bg-indigo-500/20' : card.color === 'purple' ? 'bg-purple-500/20' :
+                    card.color === 'amber' ? 'bg-amber-500/20' : 'bg-rose-500/20'}`}>
                     <card.icon className={`w-5 h-5 ${
-                      card.color === 'blue' ? 'text-blue-600' : card.color === 'green' ? 'text-green-600' :
-                      card.color === 'indigo' ? 'text-indigo-600' : card.color === 'purple' ? 'text-purple-600' :
-                      card.color === 'amber' ? 'text-amber-600' : 'text-rose-600'}`} />
+                      card.color === 'blue' ? 'text-blue-400' : card.color === 'green' ? 'text-green-400' :
+                      card.color === 'indigo' ? 'text-indigo-400' : card.color === 'purple' ? 'text-purple-400' :
+                      card.color === 'amber' ? 'text-amber-400' : 'text-rose-400'}`} />
                   </div>
-                  <div className="text-3xl font-bold text-gray-900 font-heading">{card.val}</div>
-                  <div className="text-xs text-gray-400 mt-1">{card.label}</div>
+                  <div className="text-3xl font-bold text-white font-heading">{card.val}</div>
+                  <div className="text-xs text-white/40 mt-1">{card.label}</div>
                 </div>
               ))}
             </div>
 
-            <h2 className="font-heading text-xl font-bold text-gray-900 mb-4">قائمة العملاء</h2>
+            <h2 className="font-heading text-xl font-bold text-white mb-4">قائمة العملاء</h2>
             {(!stats?.customers || stats.customers.length === 0) ? (
-              <div className="bg-white rounded-xl border border-dashed border-gray-200 p-12 text-center">
-                <Users className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-400">لا يوجد عملاء مشتركون بعد</p>
+              <div className="rounded-xl border border-dashed border-white/10 p-12 text-center" style={{ background: "rgba(13,26,53,0.5)" }}>
+                <Users className="w-10 h-10 text-white/20 mx-auto mb-3" />
+                <p className="text-white/40">لا يوجد عملاء مشتركون بعد</p>
               </div>
             ) : (
-              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="rounded-xl border border-white/10 overflow-hidden" style={{ background: "rgba(13,26,53,0.7)" }}>
                 <div className="overflow-x-auto">
                   <table className="w-full text-right text-sm">
-                    <thead className="bg-gray-50 border-b border-gray-100">
+                    <thead className="border-b border-white/10" style={{ background: "rgba(10,15,30,0.6)" }}>
                       <tr>
-                        <th className="py-3 px-4 font-medium text-gray-500">#</th>
-                        <th className="py-3 px-4 font-medium text-gray-500">البريد</th>
-                        <th className="py-3 px-4 font-medium text-gray-500">عدد الاشتراكات</th>
-                        <th className="py-3 px-4 font-medium text-gray-500">الدورات المشتراة</th>
+                        <th className="py-3 px-4 font-medium text-white/50">#</th>
+                        <th className="py-3 px-4 font-medium text-white/50">البريد</th>
+                        <th className="py-3 px-4 font-medium text-white/50">عدد الاشتراكات</th>
+                        <th className="py-3 px-4 font-medium text-white/50">الدورات المشتراة</th>
                       </tr>
                     </thead>
                     <tbody>
                       {stats.customers.map((c, i) => (
-                        <tr key={c.email} className="border-b border-gray-50 last:border-0">
-                          <td className="py-3 px-4 text-gray-400">{i + 1}</td>
-                          <td className="py-3 px-4 font-medium text-gray-800" dir="ltr">{c.email}</td>
-                          <td className="py-3 px-4 text-gray-600">{c.enrollments}</td>
+                        <tr key={c.email} className="border-b border-white/5 last:border-0">
+                          <td className="py-3 px-4 text-white/40">{i + 1}</td>
+                          <td className="py-3 px-4 font-medium text-white" dir="ltr">{c.email}</td>
+                          <td className="py-3 px-4 text-white/70">{c.enrollments}</td>
                           <td className="py-3 px-4">
                             <div className="flex flex-wrap gap-1">
                               {c.courses.map((co, idx) => (
-                                <span key={idx} className={`text-xs px-2 py-0.5 rounded ${co.type === 'exam_simulation' ? 'bg-purple-50 text-purple-700' : 'bg-blue-50 text-blue-700'}`}>
+                                <span key={idx} className={`text-xs px-2 py-0.5 rounded ${co.type === 'exam_simulation' ? 'bg-purple-500/15 text-purple-300' : 'bg-blue-500/15 text-blue-300'}`}>
                                   {co.cert} · {co.type === 'exam_simulation' ? 'محاكاة' : 'شاملة'}
                                 </span>
                               ))}

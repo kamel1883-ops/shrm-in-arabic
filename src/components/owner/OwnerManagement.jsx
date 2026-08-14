@@ -73,13 +73,13 @@ export default function OwnerManagement() {
   ];
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden" dir="rtl">
+    <div className="rounded-2xl border border-white/10 overflow-hidden" dir="rtl" style={{ background: "rgba(13,26,53,0.7)" }}>
       {/* tabs */}
-      <div className="border-b border-gray-100 px-4 bg-gray-50">
+      <div className="border-b border-white/10 px-4" style={{ background: "rgba(10,15,30,0.6)" }}>
         <div className="flex gap-1 overflow-x-auto">
           {tabs.map(t => (
             <button key={t.key} onClick={() => setActiveTab(t.key)}
-              className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition ${activeTab === t.key ? "border-yellow-500 text-gray-900" : "border-transparent text-gray-400 hover:text-gray-700"}`}>
+              className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition ${activeTab === t.key ? "border-yellow-400 text-white" : "border-transparent text-white/40 hover:text-white/80"}`}>
               <t.icon className="w-4 h-4" /> {t.label}
             </button>
           ))}
@@ -95,10 +95,10 @@ export default function OwnerManagement() {
               { label: "الفلاش كاردز", val: counts.flashcards, icon: Brain, color: "text-yellow-600" },
               { label: "الأسئلة", val: TOTAL_EXAM_QUESTIONS, icon: FileCheck, color: "text-purple-600" },
             ].map(s => (
-              <div key={s.label} className="rounded-xl border border-gray-200 p-5 bg-gray-50">
+              <div key={s.label} className="rounded-xl border border-white/10 p-5" style={{ background: "rgba(10,15,30,0.5)" }}>
                 <s.icon className={`w-6 h-6 ${s.color} mb-3`} />
-                <div className="text-3xl font-bold text-gray-900 font-heading">{s.val}</div>
-                <div className="text-gray-400 text-sm">{s.label}</div>
+                <div className="text-3xl font-bold text-white font-heading">{s.val}</div>
+                <div className="text-white/40 text-sm">{s.label}</div>
               </div>
             ))}
           </div>
@@ -107,48 +107,48 @@ export default function OwnerManagement() {
         {activeTab === "courses" && (
           <div className="space-y-4">
             {courses.map(course => (
-              <div key={course.id} className="rounded-xl border border-gray-200 p-5 bg-gray-50">
+              <div key={course.id} className="rounded-xl border border-white/10 p-5" style={{ background: "rgba(10,15,30,0.5)" }}>
                 {editingCourse?.id === course.id ? (
                   <div className="space-y-3">
                     <div className="grid md:grid-cols-2 gap-3">
                       <div>
-                        <Label className="text-gray-600 text-xs mb-1">السعر (ريال)</Label>
+                        <Label className="text-white/60 text-xs mb-1">السعر (ريال)</Label>
                         <Input type="number" value={editingCourse.price || 0}
                           onChange={e => setEditingCourse({ ...editingCourse, price: parseFloat(e.target.value) })}
-                          className="bg-white border-gray-200" />
+                          className="bg-white/5 border-white/10 text-white" />
                       </div>
                       <div>
-                        <Label className="text-gray-600 text-xs mb-1">الحالة</Label>
-                        <select className="w-full rounded-md bg-white border border-gray-200 px-3 py-2 text-sm"
+                        <Label className="text-white/60 text-xs mb-1">الحالة</Label>
+                        <select className="w-full rounded-md bg-white/5 border border-white/10 text-white px-3 py-2 text-sm"
                           value={editingCourse.is_active ? "active" : "inactive"}
                           onChange={e => setEditingCourse({ ...editingCourse, is_active: e.target.value === "active" })}>
-                          <option value="active">مفعّل</option>
-                          <option value="inactive">معطّل</option>
+                          <option value="active" className="bg-slate-800">مفعّل</option>
+                          <option value="inactive" className="bg-slate-800">معطّل</option>
                         </select>
                       </div>
                     </div>
                     <div>
-                      <Label className="text-gray-600 text-xs mb-1">الوصف</Label>
+                      <Label className="text-white/60 text-xs mb-1">الوصف</Label>
                       <Textarea value={editingCourse.description || ""}
                         onChange={e => setEditingCourse({ ...editingCourse, description: e.target.value })}
-                        className="bg-white border-gray-200" rows={3} />
+                        className="bg-white/5 border-white/10 text-white" rows={3} />
                     </div>
                     <div className="flex gap-2">
                       <Button size="sm" disabled={saving} onClick={() => saveCourse(editingCourse)}
                         style={{ background: "linear-gradient(135deg,#F59E0B,#D97706)", color: "#000" }}>
                         <Save className="w-4 h-4 ml-1" /> {saving ? "جاري الحفظ..." : "حفظ"}
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => setEditingCourse(null)}>إلغاء</Button>
+                      <Button size="sm" variant="outline" className="border-white/20 text-white/60 hover:bg-white/10" onClick={() => setEditingCourse(null)}>إلغاء</Button>
                     </div>
                   </div>
                 ) : (
                   <div className="flex items-center justify-between flex-wrap gap-2">
                     <div>
-                      <h3 className="font-bold text-gray-900">{course.title}</h3>
-                      <p className="text-gray-400 text-xs mt-1">{course.certificate_type} · {course.course_type === "main" ? "دورة تعليمية" : "محاكاة امتحان"}</p>
-                      <p className="text-yellow-600 font-bold text-sm mt-1">{course.price} ر.س</p>
+                      <h3 className="font-bold text-white">{course.title}</h3>
+                      <p className="text-white/40 text-xs mt-1">{course.certificate_type} · {course.course_type === "main" ? "دورة تعليمية" : "محاكاة امتحان"}</p>
+                      <p className="text-yellow-400 font-bold text-sm mt-1">{course.price} ر.س</p>
                     </div>
-                    <Button size="sm" variant="outline" onClick={() => setEditingCourse(course)}>تعديل</Button>
+                    <Button size="sm" variant="outline" className="border-white/20 text-white/60 hover:bg-white/10" onClick={() => setEditingCourse(course)}>تعديل</Button>
                   </div>
                 )}
               </div>
