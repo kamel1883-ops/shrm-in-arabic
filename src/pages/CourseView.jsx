@@ -5,6 +5,8 @@ import { Award, Play, FileCheck, Brain, ChevronLeft, ChevronRight, Lock, CheckCi
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import ExamRunner from "@/components/ExamRunner";
+import VideoLessonPlayer from "@/components/VideoLessonPlayer";
+import { getLesson } from "@/data/courseLessons";
 
 export default function CourseView() {
   const { courseId } = useParams();
@@ -201,7 +203,7 @@ export default function CourseView() {
                     الوحدة {activeUnit.order}: {activeUnit.title}
                   </h2>
                   {activeTab === "video" && (
-                    <VideoTab unit={activeUnit} enrolled={enrolled} user={user} courseId={courseId} onComplete={loadData} />
+                    <VideoTab unit={activeUnit} enrolled={enrolled} user={user} courseId={courseId} certType={course.certificate_type} onComplete={loadData} />
                   )}
                   {activeTab === "quiz" && (
                     <QuizTab unit={activeUnit} enrolled={enrolled} user={user} courseId={courseId} onComplete={loadData} />
@@ -251,22 +253,8 @@ export default function CourseView() {
   );
 }
 
-function VideoTab({ unit, enrolled, user, courseId, onComplete }) {
-  const [marked, setMarked] = useState(false);
-
-  async function markWatched() {
-    if (!user || !enrolled) return;
-    await base44.entities.UserProgress.create({
-      user_id: user.id,
-      course_id: courseId,
-      unit_id: unit.id,
-      progress_type: "video_watched",
-      completed_at: new Date().toISOString(),
-    });
-    setMarked(true);
-    onComplete();
-  }
-
+function VideoTab({ unit, enrolled, user, courseId, certType, onComplete }) {
+  const lesson = getLesson(certType, unit.order);
   return (
     <div>
       {unit.video_url ? (
@@ -278,19 +266,23 @@ function VideoTab({ unit, enrolled, user, courseId, onComplete }) {
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           />
         </div>
+      ) : lesson ? (
+        <VideoLessonPlayer
+          lesson={lesson}
+          certType={certType}
+          enrolled={enrolled}
+          user={user}
+          courseId={courseId}
+          unitId={unit.id}
+          onComplete={onComplete}
+        />
       ) : (
         <div className="bg-gray-100 rounded-xl h-64 flex flex-col items-center justify-center mb-4 text-gray-400">
           <Play className="w-12 h-12 mb-2 opacity-40" />
           <p className="text-sm">الفيديو سيُضاف قريباً</p>
         </div>
       )}
-      {unit.description && <p className="text-gray-600 text-sm leading-relaxed mb-4">{unit.description}</p>}
-      {enrolled && user && !marked && (
-        <Button onClick={markWatched} variant="outline" size="sm" className="text-green-600 border-green-200 hover:bg-green-50">
-          <CheckCircle className="w-4 h-4 ml-1" /> تحديد الفيديو كمشاهَد
-        </Button>
-      )}
-      {marked && <p className="text-green-600 text-sm flex items-center gap-1"><CheckCircle className="w-4 h-4" /> تم تسجيل المشاهدة</p>}
+      {unit.description && <p className="text-gray-600 text-sm leading-relaxed mb-4 mt-3">{unit.description}</p>}
     </div>
   );
 }
