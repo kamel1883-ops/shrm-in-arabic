@@ -19,8 +19,9 @@ export default async function(req: Request): Promise<Response> {
 
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object;
-      const { user_id, course_id } = session.metadata || {};
-      if (user_id && course_id) {
+      const { course_id } = session.metadata || {};
+      const email = session.metadata?.customer_email || session.customer_email || session.customer_details?.email;
+      if (course_id) {
         const base44 = createClientFromRequest(req);
         const enrollments = await base44.asServiceRole.entities.Enrollment.filter({
           stripe_session_id: session.id,
@@ -28,6 +29,15 @@ export default async function(req: Request): Promise<Response> {
         if (enrollments.length > 0) {
           await base44.asServiceRole.entities.Enrollment.update(enrollments[0].id, {
             payment_status: 'paid',
+            customer_email: email || enrollments[0].customer_email,
+          });
+        } else if (email) {
+          await base44.asServiceRole.entities.Enrollment.create({
+            course_id,
+            stripe_session_id: session.id,
+            customer_email: email,
+            payment_status: 'paid',
+            enrolled_at: new Date().toISOString(),
           });
         }
       }

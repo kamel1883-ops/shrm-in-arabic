@@ -29,6 +29,8 @@ import CourseOutline from './pages/CourseOutline';
 import ResourceLibrary from './pages/ResourceLibrary';
 import CertificationGuide from './pages/CertificationGuide';
 import Notifications from './pages/Notifications';
+import Owner from './pages/Owner';
+import StudentLayout from './components/StudentLayout';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -54,25 +56,28 @@ const AuthenticatedApp = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/courses" element={<Courses />} />
+      <Route path="/owner" element={<Owner />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/enrollment-success" element={<EnrollmentSuccess />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/flashcards" element={<Flashcards />} />
-      <Route path="/progress-report" element={<ProgressReport />} />
+      <Route path="/checkout/:courseId" element={<Checkout />} />
       <Route path="/instructor-about" element={<InstructorAbout />} />
-      <Route path="/course-outline" element={<CourseOutline />} />
-      <Route path="/resource-library" element={<ResourceLibrary />} />
-      <Route path="/certification-guide" element={<CertificationGuide />} />
-      <Route path="/notifications" element={<Notifications />} />
       <Route path="/admin" element={<Admin />} />
       <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/course/:courseId" element={<CourseView />} />
-        <Route path="/exam/:courseId" element={<ExamSimulation />} />
-        <Route path="/checkout/:courseId" element={<Checkout />} />
+        <Route element={<StudentLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/course/:courseId" element={<CourseView />} />
+          <Route path="/exam/:courseId" element={<ExamSimulation />} />
+          <Route path="/flashcards" element={<Flashcards />} />
+          <Route path="/progress-report" element={<ProgressReport />} />
+          <Route path="/certification-guide" element={<CertificationGuide />} />
+          <Route path="/course-outline" element={<CourseOutline />} />
+          <Route path="/resource-library" element={<ResourceLibrary />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/notifications" element={<Notifications />} />
+        </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

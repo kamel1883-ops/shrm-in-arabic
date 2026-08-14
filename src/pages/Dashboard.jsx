@@ -1,37 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { Award, BookOpen, FileCheck, BarChart2, LogOut, ArrowLeft, Clock } from "lucide-react";
+import { Award, BookOpen, FileCheck, BarChart2, ArrowLeft, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import SHRMLogo from "@/components/SHRMLogo";
 
 export default function Dashboard() {
-  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [enrollments, setEnrollments] = useState([]);
   const [courses, setCourses] = useState([]);
   const [progress, setProgress] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadData();
-  }, []);
+  useEffect(() => { loadData(); }, []);
 
   async function loadData() {
     try {
       const u = await base44.auth.me();
       setUser(u);
+      const email = (u.email || "").trim().toLowerCase();
       const [enrs, allCourses, prog] = await Promise.all([
-        base44.entities.Enrollment.filter({ user_id: u.id, payment_status: "paid" }),
+        email ? base44.entities.Enrollment.filter({ customer_email: email, payment_status: "paid" })
+               : base44.entities.Enrollment.filter({ payment_status: "paid" }),
         base44.entities.Course.filter({ is_active: true }),
         base44.entities.UserProgress.filter({ user_id: u.id }),
       ]);
-      setEnrollments(enrs);
+      setEnrollments(Array.isArray(enrs) ? enrs.filter(e => email && (e.customer_email || "").trim().toLowerCase() === email) : []);
       setCourses(allCourses);
       setProgress(prog);
     } catch {
-      navigate("/login");
+      setEnrollments([]); setCourses([]); setProgress([]);
     }
     setLoading(false);
   }
@@ -51,50 +49,39 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 font-body" dir="rtl">
-      <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <SHRMLogo size={40} showText={true} />
-          </Link>
-          <Button variant="ghost" size="sm" className="text-gray-500" onClick={() => base44.auth.logout("/")}>
-            <LogOut className="w-4 h-4 ml-1" /> تسجيل الخروج
-          </Button>
-        </div>
-      </header>
+    <div className="space-y-8">
+      <div>
+        <h1 className="font-heading text-3xl font-bold text-gray-900 mb-1">أهلاً، {user?.full_name || "طالب"} 👋</h1>
+        <p className="text-gray-500">دوراتك المشتراة — كل ما تبنيه يظهر هنا</p>
+      </div>
 
-      <div className="max-w-5xl mx-auto px-4 py-10">
-        {/* Welcome */}
-        <div className="mb-8">
-          <h1 className="font-heading text-3xl font-bold text-gray-900 mb-1">أهلاً، {user?.full_name || "طالب"} 👋</h1>
-          <p className="text-gray-500">تابع تقدمك في مسار الشهادة</p>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-          {[
-            { icon: BookOpen, label: "الدورات المسجّلة", val: enrolledCourses.length, color: "blue" },
-            { icon: FileCheck, label: "اختبارات مكتملة", val: progress.filter(p => p.progress_type === "quiz_completed").length, color: "green" },
-            { icon: BarChart2, label: "متوسط الدرجات", val: progress.filter(p => p.quiz_score).length > 0 ? `${Math.round(progress.filter(p => p.quiz_score).reduce((s, p) => s + p.quiz_score, 0) / progress.filter(p => p.quiz_score).length)}%` : "—", color: "purple" },
-            { icon: Award, label: "الشهادات المستهدفة", val: [...new Set(enrolledCourses.map(c => c.certificate_type))].length, color: "orange" },
-          ].map(item => (
-            <div key={item.label} className="bg-white rounded-xl border border-gray-200 p-4">
-              <div className={`w-9 h-9 rounded-lg flex items-center justify-center mb-3 ${item.color === 'blue' ? 'bg-blue-100' : item.color === 'green' ? 'bg-green-100' : item.color === 'purple' ? 'bg-purple-100' : 'bg-orange-100'}`}>
-                <item.icon className={`w-4 h-4 ${item.color === 'blue' ? 'text-blue-600' : item.color === 'green' ? 'text-green-600' : item.color === 'purple' ? 'text-purple-600' : 'text-orange-600'}`} />
-              </div>
-              <div className="text-2xl font-bold text-gray-900 font-heading">{item.val}</div>
-              <div className="text-xs text-gray-400 mt-0.5">{item.label}</div>
+      {/* Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+          { icon: BookOpen, label: "الدورات المشتراة", val: enrolledCourses.length, color: 'blue' },
+          { icon: FileCheck, label: "نشاط مكتمل", val: progress.filter(p => p.progress_type === "quiz_completed").length, color: 'green' },
+          { icon: BarChart2, label: "متوسط الدرجات", val: progress.filter(p => p.quiz_score).length > 0 ? `${Math.round(progress.filter(p => p.quiz_score).reduce((s, p) => s + p.quiz_score, 0) / progress.filter(p => p.quiz_score).length)}%` : "—", color: 'purple' },
+          { icon: Award, label: "الشهادات المستهدفة", val: [...new Set(enrolledCourses.map(c => c.certificate_type))].length, color: 'orange' },
+        ].map(item => (
+          <div key={item.label} className="bg-white rounded-xl border border-gray-200 p-4">
+            <div className={`w-9 h-9 rounded-lg flex items-center justify-center mb-3 ${item.color === 'blue' ? 'bg-blue-100' : item.color === 'green' ? 'bg-green-100' : item.color === 'purple' ? 'bg-purple-100' : 'bg-orange-100'}`}>
+              <item.icon className={`w-4 h-4 ${item.color === 'blue' ? 'text-blue-600' : item.color === 'green' ? 'text-green-600' : item.color === 'purple' ? 'text-purple-600' : 'text-orange-600'}`} />
             </div>
-          ))}
-        </div>
+            <div className="text-2xl font-bold text-gray-900 font-heading">{item.val}</div>
+            <div className="text-xs text-gray-400 mt-0.5">{item.label}</div>
+          </div>
+        ))}
+      </div>
 
-        {/* Enrolled Courses */}
+      {/* Enrolled Courses */}
+      <div>
         <h2 className="font-heading text-xl font-bold text-gray-900 mb-4">دوراتي</h2>
         {enrolledCourses.length === 0 ? (
           <div className="bg-white rounded-xl border border-dashed border-gray-200 p-12 text-center">
-            <BookOpen className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-400 mb-4">لم تشترك في أي دورة بعد</p>
-            <Link to="/courses"><Button className="bg-blue-700 hover:bg-blue-800 text-white">استعرض الدورات</Button></Link>
+            <Lock className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+            <p className="text-gray-500 mb-1">لا تملك دورات مشتراة بعد</p>
+            <p className="text-gray-400 text-sm mb-5">اختر دورة واشترك للوصول الكامل للمحتوى</p>
+            <Link to="/courses"><Button className="bg-blue-700 hover:bg-blue-800 text-white">تصفّح الدورات</Button></Link>
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 gap-5">
@@ -125,13 +112,6 @@ export default function Dashboard() {
             })}
           </div>
         )}
-
-        {/* Browse more */}
-        <div className="mt-8 text-center">
-          <Link to="/courses">
-            <Button variant="outline" className="border-blue-200 text-blue-700 hover:bg-blue-50">استعرض المزيد من الدورات</Button>
-          </Link>
-        </div>
       </div>
     </div>
   );

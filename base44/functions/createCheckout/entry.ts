@@ -5,10 +5,10 @@ import { secrets } from 'base44:runtime';
 export default async function(req: Request): Promise<Response> {
   try {
     const stripe = new Stripe(secrets.get("STRIPE_SECRET_KEY"), { apiVersion: '2023-10-16' });
-    const { course_id, course_title, amount, user_id } = await req.json();
+    const { course_id, course_title, amount, customer_email, user_id } = await req.json();
 
-    if (!course_id || !amount) {
-      return Response.json({ error: 'Missing required fields' }, { status: 400 });
+    if (!course_id || !amount || !customer_email) {
+      return Response.json({ error: 'Missing required fields (course_id, amount, customer_email)' }, { status: 400 });
     }
 
     const base44 = createClientFromRequest(req);
@@ -16,6 +16,7 @@ export default async function(req: Request): Promise<Response> {
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
+      customer_email,
       line_items: [{
         price_data: {
           currency: 'usd',
@@ -25,24 +26,24 @@ export default async function(req: Request): Promise<Response> {
         quantity: 1,
       }],
       mode: 'payment',
-      success_url: `${origin}/enrollment-success?session_id={CHECKOUT_SESSION_ID}&course_id=${course_id}`,
+      success_url: `${origin}/enrollment-success?session_id={CHECKOUT_SESSION_ID}&course_id=${course_id}&email=${encodeURIComponent(customer_email)}`,
       cancel_url: `${origin}/courses`,
       metadata: {
         base44_app_id: secrets.get("BASE44_APP_ID"),
         user_id: user_id || '',
         course_id,
+        customer_email,
       },
     });
 
-    if (user_id) {
-      await base44.asServiceRole.entities.Enrollment.create({
-        user_id,
-        course_id,
-        stripe_session_id: session.id,
-        payment_status: 'pending',
-        enrolled_at: new Date().toISOString(),
-      });
-    }
+    await base44.asServiceRole.entities.Enrollment.create({
+      user_id: user_id || null,
+      customer_email,
+      course_id,
+      stripe_session_id: session.id,
+      payment_status: 'pending',
+      enrolled_at: new Date().toISOString(),
+    });
 
     return Response.json({ url: session.url });
   } catch (error) {

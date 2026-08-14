@@ -5,6 +5,9 @@
     "user_id": {
       "type": "string"
     },
+    "customer_email": {
+      "type": "string"
+    },
     "course_id": {
       "type": "string"
     },
@@ -26,7 +29,6 @@
     }
   },
   "required": [
-    "user_id",
     "course_id"
   ]
 }
