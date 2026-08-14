@@ -31,7 +31,7 @@ export default function ExamRunner({
   };
 
   function startExam() {
-    const q = getExamQuestions(examNumber);
+    const q = getExamQuestions(examNumber, certType);
     setQuestions(q);
     setCurrent(0);
     setAnswers({});
