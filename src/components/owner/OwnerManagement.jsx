@@ -8,6 +8,8 @@ import { BookOpen, FileCheck, Brain, Video, Save, BarChart3 as BarChart3Icon } f
 import AdminUnitManager from "@/components/admin/AdminUnitManager";
 import AdminFlashcardManager from "@/components/admin/AdminFlashcardManager";
 import AdminExamManager from "@/components/admin/AdminExamManager";
+import OwnerLessonGenerator from "@/components/owner/OwnerLessonGenerator";
+import { Sparkles } from "lucide-react";
 import { TOTAL_EXAM_QUESTIONS } from "@/data/examQuestions";
 
 /**
@@ -70,6 +72,7 @@ export default function OwnerManagement() {
     { key: "units", label: "الوحدات والفيديوهات", icon: Video },
     { key: "flashcards", label: "الفلاش كاردز", icon: Brain },
     { key: "questions", label: "الامتحانات", icon: FileCheck },
+    { key: "lessons", label: "توليد الدروس (20 دقيقة)", icon: Sparkles },
   ];
 
   return (
@@ -164,6 +167,9 @@ export default function OwnerManagement() {
         )}
         {activeTab === "questions" && (
           <AdminExamManager courses={courses} selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId} />
+        )}
+        {activeTab === "lessons" && (
+          <OwnerLessonGenerator />
         )}
       </div>
     </div>

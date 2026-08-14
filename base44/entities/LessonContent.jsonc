@@ -1,0 +1,68 @@
+{
+  "name": "LessonContent",
+  "type": "object",
+  "properties": {
+    "cert_type": {
+      "type": "string",
+      "enum": [
+        "SHRM-CP",
+        "SHRM-SCP"
+      ]
+    },
+    "lesson_order": {
+      "type": "number"
+    },
+    "title": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "slides": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "heading": {
+            "type": "string"
+          },
+          "bullets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "narration": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "heading",
+          "narration"
+        ]
+      }
+    },
+    "duration_minutes": {
+      "type": "number",
+      "default": 20
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "ready",
+        "failed"
+      ],
+      "default": "pending"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "cert_type",
+    "lesson_order",
+    "title"
+  ]
+}

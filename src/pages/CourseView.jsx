@@ -254,7 +254,28 @@ export default function CourseView() {
 }
 
 function VideoTab({ unit, enrolled, user, courseId, certType, onComplete }) {
-  const lesson = getLesson(certType, unit.order);
+  const [lesson, setLesson] = useState(null);
+  const [loadingLesson, setLoadingLesson] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      setLoadingLesson(true);
+      let found = null;
+      try {
+        const list = await base44.entities.LessonContent.filter({ cert_type: certType, lesson_order: unit.order });
+        if (list.length && list[0].status === "ready" && list[0].slides?.length) {
+          found = { ...list[0], order: list[0].lesson_order };
+        }
+      } catch (e) { console.error(e); }
+      if (active) {
+        setLesson(found || getLesson(certType, unit.order));
+        setLoadingLesson(false);
+      }
+    })();
+    return () => { active = false; };
+  }, [certType, unit.order]);
+
   return (
     <div>
       {unit.video_url ? (
@@ -266,6 +287,8 @@ function VideoTab({ unit, enrolled, user, courseId, certType, onComplete }) {
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           />
         </div>
+      ) : loadingLesson ? (
+        <div className="h-48 flex items-center justify-center"><div className="w-6 h-6 border-4 border-blue-200 border-t-blue-700 rounded-full animate-spin" /></div>
       ) : lesson ? (
         <VideoLessonPlayer
           lesson={lesson}
