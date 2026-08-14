@@ -9,7 +9,8 @@ import AdminUnitManager from "@/components/admin/AdminUnitManager";
 import AdminFlashcardManager from "@/components/admin/AdminFlashcardManager";
 import AdminExamManager from "@/components/admin/AdminExamManager";
 import OwnerLessonGenerator from "@/components/owner/OwnerLessonGenerator";
-import { Sparkles } from "lucide-react";
+import OwnerContentExporter from "@/components/owner/OwnerContentExporter";
+import { Sparkles, Download } from "lucide-react";
 import { TOTAL_EXAM_QUESTIONS } from "@/data/examQuestions";
 
 /**
@@ -73,6 +74,7 @@ export default function OwnerManagement() {
     { key: "flashcards", label: "الفلاش كاردز", icon: Brain },
     { key: "questions", label: "الامتحانات", icon: FileCheck },
     { key: "lessons", label: "توليد الدروس (20 دقيقة)", icon: Sparkles },
+    { key: "export", label: "تحميل المحتوى (Word)", icon: Download },
   ];
 
   return (
@@ -170,6 +172,9 @@ export default function OwnerManagement() {
         )}
         {activeTab === "lessons" && (
           <OwnerLessonGenerator />
+        )}
+        {activeTab === "export" && (
+          <OwnerContentExporter />
         )}
       </div>
     </div>
