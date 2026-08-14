@@ -31,6 +31,8 @@ import CertificationGuide from './pages/CertificationGuide';
 import Notifications from './pages/Notifications';
 import Owner from './pages/Owner';
 import StudentLayout from './components/StudentLayout';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -56,6 +58,8 @@ const AuthenticatedApp = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/courses" element={<Courses />} />
+      <Route path="/blog" element={<Blog />} />
+      <Route path="/blog/:slug" element={<BlogPost />} />
       <Route path="/owner" element={<Owner />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
