@@ -26,6 +26,9 @@
     "enrolled_at": {
       "type": "string",
       "format": "date-time"
+    },
+    "coupon_code": {
+      "type": "string"
     }
   },
   "required": [

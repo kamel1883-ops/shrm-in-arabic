@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { Award, ShieldCheck, ArrowRight, Loader2, BookOpen, FileCheck, Mail } from "lucide-react";
+import { Award, ShieldCheck, ArrowRight, Loader2, BookOpen, FileCheck, Mail, Ticket, CheckCircle2, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,6 +16,11 @@ export default function Checkout() {
   const [loading, setLoading] = useState(true);
   const [paying, setPaying] = useState(false);
   const [email, setEmail] = useState("");
+  const [couponCode, setCouponCode] = useState("");
+  const [coupon, setCoupon] = useState(null);
+  const [couponMsg, setCouponMsg] = useState("");
+  const [couponOk, setCouponOk] = useState(false);
+  const [validating, setValidating] = useState(false);
 
   useEffect(() => { loadData(); }, [courseId]);
 
@@ -29,6 +34,31 @@ export default function Checkout() {
       navigate("/courses");
     }
     setLoading(false);
+  }
+
+  async function applyCoupon() {
+    setCouponMsg(""); setCoupon(null); setCouponOk(false);
+    const code = couponCode.trim().toUpperCase();
+    if (!code) return;
+    setValidating(true);
+    try {
+      const found = await base44.entities.DiscountCode.filter({ code, active: true });
+      const c = found[0];
+      if (!c) {
+        setCouponMsg("كود الخصم غير صالح"); setCouponOk(false);
+      } else if (c.max_uses && (c.uses_count || 0) >= c.max_uses) {
+        setCouponMsg("انتهت صلاحية هذا الكود"); setCouponOk(false);
+      } else {
+        setCoupon(c); setCouponMsg(`تم تطبيق خصم ${c.percentage}%`); setCouponOk(true);
+      }
+    } catch (e) {
+      setCouponMsg("تعذّر التحقق من الكود"); setCouponOk(false);
+    }
+    setValidating(false);
+  }
+
+  function clearCoupon() {
+    setCouponCode(""); setCoupon(null); setCouponMsg(""); setCouponOk(false);
   }
 
   async function handleCheckout(e) {
@@ -50,7 +80,12 @@ export default function Checkout() {
         amount: course.price,
         customer_email: email,
         user_id: u?.id,
+        coupon_code: coupon ? coupon.code : "",
       });
+      if (res.data?.free) {
+        window.location.href = res.data.url;
+        return;
+      }
       if (res.data?.url) {
         window.location.href = res.data.url;
       } else {
@@ -71,6 +106,10 @@ export default function Checkout() {
   if (!course) return null;
 
   const isExam = course.course_type === "exam_simulation";
+  const discountPct = coupon?.percentage || 0;
+  const discountAmount = (course.price * discountPct) / 100;
+  const finalAmount = Math.max(0, course.price - discountAmount);
+  const isFree = finalAmount === 0;
 
   return (
     <div className="min-h-screen bg-gray-50 font-body flex items-center justify-center px-4 py-10" dir="rtl">
@@ -95,18 +134,63 @@ export default function Checkout() {
           </div>
         </div>
 
+        {/* كود الخصم */}
+        <div className="rounded-xl border border-gray-100 p-4 mb-5">
+          <Label className="text-sm text-gray-700 flex items-center gap-1.5 mb-2">
+            <Ticket className="w-4 h-4 text-gray-400" /> كود خصم (إن وجد)
+          </Label>
+          {coupon ? (
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="font-mono font-bold text-green-700" dir="ltr">{coupon.code}</span>
+                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">خصم {coupon.percentage}%</span>
+              </div>
+              <button onClick={clearCoupon} className="text-xs text-gray-500 hover:text-red-600">إزالة</button>
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <Input
+                  type="text"
+                  value={couponCode}
+                  onChange={(e) => setCouponCode(e.target.value)}
+                  placeholder="أدخل الكود"
+                  className="h-11 uppercase"
+                  dir="ltr"
+                />
+              </div>
+              <Button type="button" onClick={applyCoupon} disabled={validating || !couponCode.trim()} variant="outline" className="h-11 px-4">
+                {validating ? <Loader2 className="w-4 h-4 animate-spin" /> : "تطبيق"}
+              </Button>
+            </div>
+          )}
+          {couponMsg && (
+            <p className={`text-xs mt-2 flex items-center gap-1 ${couponOk ? "text-green-600" : "text-red-500"}`}>
+              {couponOk ? <CheckCircle2 className="w-3.5 h-3.5" /> : <XCircle className="w-3.5 h-3.5" />}
+              {couponMsg}
+            </p>
+          )}
+        </div>
+
+        {/* ملخص السعر */}
         <div className="border-t border-b border-gray-100 py-4 mb-6">
           <div className="flex justify-between items-center text-sm text-gray-500 mb-2">
             <span>سعر الدورة</span>
             <span>${course.price}</span>
           </div>
+          {discountPct > 0 && (
+            <div className="flex justify-between items-center text-sm text-green-600 mb-2">
+              <span>خصم ({discountPct}%)</span>
+              <span>- ${discountAmount.toFixed(2)}</span>
+            </div>
+          )}
           <div className="flex justify-between items-center font-bold text-gray-900 text-lg">
             <span>الإجمالي</span>
-            <span>${course.price}</span>
+            <span>{isFree ? "مجاني" : `$${finalAmount.toFixed(2)}`}</span>
           </div>
         </div>
 
-        <form onSubmit={handleCheckout} className="space-y-4 mb-6">
+        <form onSubmit={handleCheckout} className="space-y-4 mb-4">
           <div className="space-y-2">
             <Label htmlFor="email" className="text-sm text-gray-700">بريدك الإلكتروني (للدفع وإنشاء الحساب)</Label>
             <div className="relative">
@@ -121,20 +205,27 @@ export default function Checkout() {
                 className="pr-10 h-12"
               />
             </div>
-            <p className="text-xs text-gray-400 leading-relaxed">استخدم البريد نفسه عند إنشاء حسابك بعد الدفع — به تُربط دورتك بك.</p>
+            <p className="text-xs text-gray-400 leading-relaxed">
+              {isFree
+                ? "الاشتراك مجاني بالكامل — لن تحتاج إدخال بيانات بطاقة. نُسجّل اشتراكك مباشرة."
+                : "استخدم البريد نفسه عند إنشاء حسابك بعد الدفع — به تُربط دورتك بك."}
+            </p>
           </div>
-          <Button type="submit" disabled={paying} className="w-full bg-blue-700 hover:bg-blue-800 text-white py-6 text-base font-semibold">
+          <Button type="submit" disabled={paying} className="w-full text-white py-6 text-base font-semibold"
+            style={{ background: isFree ? "linear-gradient(135deg,#16a34a,#15803d)" : "linear-gradient(135deg,#F59E0B,#D97706)" }}>
             {paying ? (
               <><Loader2 className="w-4 h-4 ml-2 animate-spin" />جارٍ التحويل...</>
+            ) : isFree ? (
+              <><CheckCircle2 className="w-5 h-5 ml-2" /> تفعيل الاشتراك مجاناً</>
             ) : (
-              `إتمام الدفع — $${course.price}`
+              `إتمام الدفع — $${finalAmount.toFixed(2)}`
             )}
           </Button>
         </form>
 
         <div className="flex items-center justify-center gap-2 text-xs text-gray-400 mb-4">
           <ShieldCheck className="w-3.5 h-3.5" />
-          <span>مدفوعات آمنة ومشفرة عبر Stripe</span>
+          <span>{isFree ? "تفعيل فوري وآمن للاشتراك" : "مدفوعات آمنة ومشفرة عبر Stripe"}</span>
         </div>
 
         <Link to="/courses" className="flex items-center justify-center gap-1 text-sm text-blue-600 hover:text-blue-800">

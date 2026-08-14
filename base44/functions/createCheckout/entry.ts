@@ -1,11 +1,12 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.40';
 import Stripe from 'npm:stripe@14.21.0';
 import { secrets } from 'base44:runtime';
+import { createEnrollment } from '../../shared/enrollmentUtils.ts';
 
 export default async function(req: Request): Promise<Response> {
   try {
     const stripe = new Stripe(secrets.get("STRIPE_SECRET_KEY"), { apiVersion: '2023-10-16' });
-    const { course_id, course_title, amount, customer_email, user_id } = await req.json();
+    const { course_id, course_title, amount, customer_email, user_id, coupon_code } = await req.json();
 
     if (!course_id || !amount || !customer_email) {
       return Response.json({ error: 'Missing required fields (course_id, amount, customer_email)' }, { status: 400 });
@@ -14,6 +15,44 @@ export default async function(req: Request): Promise<Response> {
     const base44 = createClientFromRequest(req);
     const origin = req.headers.get('origin') || 'https://app.base44.com';
 
+    // التحقق من كوبون الخصم وتطبيقه إن وُجد
+    let finalAmount = Number(amount);
+    let appliedCoupon = null;
+    let discountPct = 0;
+
+    if (coupon_code) {
+      const codes = await base44.asServiceRole.entities.DiscountCode.filter({ code: coupon_code, active: true });
+      const coupon = codes[0];
+      if (!coupon) {
+        return Response.json({ error: 'كود الخصم غير صالح' }, { status: 400 });
+      }
+      if (coupon.max_uses && coupon.uses_count >= coupon.max_uses) {
+        return Response.json({ error: 'تم استخدام كود الخصم للحد الأقصى' }, { status: 400 });
+      }
+      discountPct = Math.min(100, Math.max(0, Number(coupon.percentage)));
+      finalAmount = Math.max(0, Number(amount) - (Number(amount) * discountPct / 100));
+      appliedCoupon = coupon.code;
+
+      // تخصيص استخدام الكوبون
+      await base44.asServiceRole.entities.DiscountCode.update(coupon.id, {
+        uses_count: (coupon.uses_count || 0) + 1,
+      });
+    }
+
+    // خصم 100% — لا حاجة للدفع عبر Stripe، نُسجّل الاشتراك مدفوعاً مباشرة
+    if (finalAmount <= 0) {
+      await createEnrollment({
+        base44, customer_email, course_id, user_id: user_id || null,
+        payment_status: "paid",
+        stripe_session_id: null,
+        coupon_code: appliedCoupon,
+      });
+
+      const url = `${origin}/enrollment-success?session_id=FREE&course_id=${course_id}&email=${encodeURIComponent(customer_email)}`;
+      return Response.json({ url, free: true });
+    }
+
+    // خصم جزئي أو بدون كوبون — جلسة Stripe بالمبلغ النهائي
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       customer_email,
@@ -21,7 +60,7 @@ export default async function(req: Request): Promise<Response> {
         price_data: {
           currency: 'usd',
           product_data: { name: course_title || 'SHRM Course' },
-          unit_amount: Math.round(amount * 100),
+          unit_amount: Math.round(finalAmount * 100),
         },
         quantity: 1,
       }],
@@ -33,16 +72,16 @@ export default async function(req: Request): Promise<Response> {
         user_id: user_id || '',
         course_id,
         customer_email,
+        coupon_code: appliedCoupon || '',
+        discount_pct: String(discountPct),
       },
     });
 
-    await base44.asServiceRole.entities.Enrollment.create({
-      user_id: user_id || null,
-      customer_email,
-      course_id,
+    await createEnrollment({
+      base44, customer_email, course_id, user_id: user_id || null,
+      payment_status: "pending",
       stripe_session_id: session.id,
-      payment_status: 'pending',
-      enrolled_at: new Date().toISOString(),
+      coupon_code: appliedCoupon,
     });
 
     return Response.json({ url: session.url });
