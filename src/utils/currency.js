@@ -1,19 +1,65 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 
-// SAR to USD conversion: 1 SAR ≈ 0.267 USD
-export const SAR_TO_USD_RATE = 0.267;
-
-// Fixed SAR display prices (per user's request — do not change)
+// الأسعار الأساسية بالريال السعودي (محددة من المالك — ثابتة)
 export const COURSE_PRICES_SAR = {
   "SHRM-CP": { main: 1300, simulation: 371 },
   "SHRM-SCP": { main: 1800, simulation: 484 },
+};
+
+/**
+ * جدول العملات المدعومة:
+ * - rate: معدل التحويل من الريال إلى هذه العملة (1 SAR = rate × عملة)
+ * - decimals: عدد الكسور العشرية حسب ISO 4217 (لـ Stripe unit_amount)
+ * - symbol: الرمز المعروض
+ * المعدلات مرنة وقابلة للتعديل؛ القيم مقربة قابلة للتحديث لاحقاً.
+ */
+export const CURRENCIES = {
+  SAR: { symbol: "ر.س", rate: 1, decimals: 2 },
+  USD: { symbol: "$", rate: 0.267, decimals: 2 },
+  EGP: { symbol: "ج.م", rate: 13.2, decimals: 2 },
+  JOD: { symbol: "د.أ", rate: 0.189, decimals: 3 },
+  OMR: { symbol: "ر.ع", rate: 0.103, decimals: 3 },
+  AED: { symbol: "د.إ", rate: 0.98, decimals: 2 },
+  KWD: { symbol: "د.ك", rate: 0.082, decimals: 3 },
+  BHD: { symbol: "د.ب", rate: 0.1, decimals: 3 },
+  QAR: { symbol: "ر.ق", rate: 0.97, decimals: 2 },
+  TRY: { symbol: "₺", rate: 9.6, decimals: 2 },
+  GBP: { symbol: "£", rate: 0.21, decimals: 2 },
+  CAD: { symbol: "C$", rate: 0.37, decimals: 2 },
+  EUR: { symbol: "€", rate: 0.25, decimals: 2 },
+  AUD: { symbol: "A$", rate: 0.41, decimals: 2 },
+  INR: { symbol: "₹", rate: 22.4, decimals: 2 },
+  PKR: { symbol: "₨", rate: 78, decimals: 2 },
+};
+
+// خريطة الدولة (ISO 3166) → عملتها
+const COUNTRY_TO_CURRENCY = {
+  SA: "SAR",
+  EG: "EGP",
+  JO: "JOD",
+  OM: "OMR",
+  AE: "AED",
+  KW: "KWD",
+  BH: "BHD",
+  QA: "QAR",
+  TR: "TRY",
+  GB: "GBP",
+  US: "USD",
+  CA: "CAD",
+  AU: "AUD",
+  DE: "EUR",
+  FR: "EUR",
+  IT: "EUR",
+  ES: "EUR",
+  NL: "EUR",
+  IN: "INR",
+  PK: "PKR",
 };
 
 let cachedCountry = null;
 
 async function detectCountry() {
   if (cachedCountry !== null) return cachedCountry;
-  // Try multiple providers; default to Saudi (Asia/Riyadh timezone) if all fail
   const providers = [
     "https://ipapi.co/country/",
     "https://ipapi.co/json/",
@@ -35,10 +81,12 @@ async function detectCountry() {
   return cachedCountry;
 }
 
+export function currencyForCountry(country) {
+  return COUNTRY_TO_CURRENCY[country] || "USD";
+}
+
 /**
- * Hook returning the user's display currency based on their detected location.
- * - Saudi Arabia → "SAR" (keep original riyal price)
- * - Other countries → "USD" (show equivalent USD value)
+ * هوك يُرجع عملة عرض الزائر حسب موقعه الجغرافي.
  */
 export function useLocalizedPrice() {
   const [currency, setCurrency] = useState("SAR");
@@ -48,7 +96,7 @@ export function useLocalizedPrice() {
   useEffect(() => {
     detectCountry().then((c) => {
       setCountry(c);
-      setCurrency(c === "SA" ? "SAR" : "USD");
+      setCurrency(currencyForCountry(c));
       setLoading(false);
     });
   }, []);
@@ -56,23 +104,45 @@ export function useLocalizedPrice() {
   return { currency, country, loading };
 }
 
-/**
- * Format a SAR amount into the localized display string.
- */
+/** يحوّل مبلغاً بالريال إلى العملة المحددة (قيمة رقمية). */
+export function convertFromSAR(sarAmount, currency) {
+  const c = CURRENCIES[currency] || CURRENCIES.USD;
+  return Number(sarAmount) * c.rate;
+}
+
+/** عدد الكسور العشرية لعملة (لاستخدامها في unit_amount لـ Stripe). */
+export function currencyDecimals(currency) {
+  return CURRENCIES[currency]?.decimals ?? 2;
+}
+
+/** ينسّق مبلغاً (بأي عملة) كسلسلة عرض كاملة برمز العملة. */
+export function formatAmount(localAmount, currency) {
+  const c = CURRENCIES[currency] || CURRENCIES.USD;
+  const decimals = c.decimals;
+  const rounded = decimals === 0 ? Math.round(localAmount) : Number(localAmount.toFixed(decimals));
+  const formatted = rounded.toLocaleString(undefined, {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  });
+  return `${formatted} ${c.symbol}`;
+}
+
+/** ينسّق مبلغاً بالريال إلى عرض بعملة الزائر (متوافق مع الاستخدام القديم). */
 export function formatLocalizedPrice(sarAmount, currency) {
-  if (currency === "SAR") {
-    return {
-      amount: Math.round(sarAmount).toLocaleString(),
-      symbol: "ر.س",
-      currency: "SAR",
-      full: `${Math.round(sarAmount).toLocaleString()} ر.س`,
-    };
-  }
-  const usd = Math.round(sarAmount * SAR_TO_USD_RATE);
+  const c = CURRENCIES[currency] || CURRENCIES.USD;
+  const decimals = c.decimals;
+  const value = convertFromSAR(sarAmount, currency);
+  const rounded = decimals === 0 ? Math.round(value) : Number(value.toFixed(decimals));
+  const formatted = rounded.toLocaleString(undefined, {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  });
   return {
-    amount: usd.toLocaleString(),
-    symbol: "$",
-    currency: "USD",
-    full: `$${usd.toLocaleString()}`,
+    amount: formatted,
+    symbol: c.symbol,
+    currency,
+    full: `${formatted} ${c.symbol}`,
+    value: rounded,
+    decimals,
   };
 }

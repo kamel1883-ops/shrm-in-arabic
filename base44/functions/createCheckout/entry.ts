@@ -6,11 +6,20 @@ import { createEnrollment } from '../../shared/enrollmentUtils.ts';
 export default async function(req: Request): Promise<Response> {
   try {
     const stripe = new Stripe(secrets.get("STRIPE_SECRET_KEY"), { apiVersion: '2023-10-16' });
-    const { course_id, course_title, amount, customer_email, user_id, coupon_code } = await req.json();
+    const { course_id, course_title, amount, currency, customer_email, user_id, coupon_code } = await req.json();
 
     if (!course_id || !amount || !customer_email) {
       return Response.json({ error: 'Missing required fields (course_id, amount, customer_email)' }, { status: 400 });
     }
+
+    // العملة وعدد الكسور العشرية (ISO 4217). افتراضياً USD بكسورين.
+    const cur = (currency || 'USD').toLowerCase();
+    const DECIMALS: Record<string, number> = {
+      sar: 2, usd: 2, egp: 2, jod: 3, omr: 3, aed: 2, kwd: 3, bhd: 3, qar: 2,
+      try: 2, gbp: 2, cad: 2, eur: 2, aud: 2, inr: 2, pkr: 2, jpy: 0, krw: 0,
+    };
+    const decimals = DECIMALS[cur] ?? 2;
+    const minorFactor = Math.pow(10, decimals);
 
     const base44 = createClientFromRequest(req);
     const origin = req.headers.get('origin') || 'https://app.base44.com';
@@ -58,9 +67,9 @@ export default async function(req: Request): Promise<Response> {
       customer_email,
       line_items: [{
         price_data: {
-          currency: 'usd',
+          currency: cur,
           product_data: { name: course_title || 'SHRM Course' },
-          unit_amount: Math.round(finalAmount * 100),
+          unit_amount: Math.round(Number(finalAmount) * minorFactor),
         },
         quantity: 1,
       }],

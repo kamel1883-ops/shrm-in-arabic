@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import SHRMLogo from "@/components/SHRMLogo";
 import { useToast } from "@/components/ui/use-toast";
+import { useLocalizedPrice, convertFromSAR, formatAmount } from "@/utils/currency";
 
 export default function Checkout() {
   const { courseId } = useParams();
@@ -21,6 +22,7 @@ export default function Checkout() {
   const [couponMsg, setCouponMsg] = useState("");
   const [couponOk, setCouponOk] = useState(false);
   const [validating, setValidating] = useState(false);
+  const { currency } = useLocalizedPrice();
 
   useEffect(() => { loadData(); }, [courseId]);
 
@@ -74,10 +76,12 @@ export default function Checkout() {
     setPaying(true);
     try {
       const u = await base44.auth.me().catch(() => null);
+      const baseLocal = convertFromSAR(course.price, currency);
       const res = await base44.functions.invoke("createCheckout", {
         course_id: courseId,
         course_title: course.title,
-        amount: course.price,
+        amount: baseLocal,
+        currency,
         customer_email: email,
         user_id: u?.id,
         coupon_code: coupon ? coupon.code : "",
@@ -107,9 +111,10 @@ export default function Checkout() {
 
   const isExam = course.course_type === "exam_simulation";
   const discountPct = coupon?.percentage || 0;
-  const discountAmount = (course.price * discountPct) / 100;
-  const finalAmount = Math.max(0, course.price - discountAmount);
-  const isFree = finalAmount === 0;
+  const baseLocal = convertFromSAR(course.price, currency);
+  const discountLocal = (baseLocal * discountPct) / 100;
+  const finalLocal = Math.max(0, baseLocal - discountLocal);
+  const isFree = finalLocal === 0;
 
   return (
     <div className="min-h-screen bg-gray-50 font-body flex items-center justify-center px-4 py-10" dir="rtl">
@@ -176,17 +181,17 @@ export default function Checkout() {
         <div className="border-t border-b border-gray-100 py-4 mb-6">
           <div className="flex justify-between items-center text-sm text-gray-500 mb-2">
             <span>سعر الدورة</span>
-            <span>${course.price}</span>
+            <span>{formatAmount(baseLocal, currency)}</span>
           </div>
           {discountPct > 0 && (
             <div className="flex justify-between items-center text-sm text-green-600 mb-2">
               <span>خصم ({discountPct}%)</span>
-              <span>- ${discountAmount.toFixed(2)}</span>
+              <span>- {formatAmount(discountLocal, currency)}</span>
             </div>
           )}
           <div className="flex justify-between items-center font-bold text-gray-900 text-lg">
             <span>الإجمالي</span>
-            <span>{isFree ? "مجاني" : `$${finalAmount.toFixed(2)}`}</span>
+            <span>{isFree ? "مجاني" : formatAmount(finalLocal, currency)}</span>
           </div>
         </div>
 
@@ -218,7 +223,7 @@ export default function Checkout() {
             ) : isFree ? (
               <><CheckCircle2 className="w-5 h-5 ml-2" /> تفعيل الاشتراك مجاناً</>
             ) : (
-              `إتمام الدفع — $${finalAmount.toFixed(2)}`
+              `إتمام الدفع — ${formatAmount(finalLocal, currency)}`
             )}
           </Button>
         </form>
