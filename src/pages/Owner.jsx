@@ -104,6 +104,9 @@ export default function Owner() {
               {loading ? <><Loader2 className="w-4 h-4 ml-2 animate-spin" />جارٍ الدخول...</> : "دخول صفحة المالك"}
             </Button>
           </form>
+          <div className="text-center mt-3">
+            <Link to="/forgot-password" className="text-sm text-blue-600 hover:underline">نسيت كلمة المرور؟</Link>
+          </div>
           <p className="text-center text-xs text-gray-400 mt-5">يُسمح بالدخول لبريد المالك المحدد فقط.</p>
         </div>
       </div>
